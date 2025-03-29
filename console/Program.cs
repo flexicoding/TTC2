@@ -1,4 +1,4 @@
-﻿using Planung;
+﻿using TTC.Console;
 
 
 IEnumerable<Kurs> kurse = [

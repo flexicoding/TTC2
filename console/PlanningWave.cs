@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Planung;
+namespace TTC.Console;
 
 public sealed class PlanningWave
 {

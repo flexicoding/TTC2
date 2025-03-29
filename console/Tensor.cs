@@ -1,4 +1,4 @@
-namespace Planung;
+namespace TTC.Console;
 
 public readonly struct Tensor(int rowCount, int columnCount, int layerCount, float[] storage)
 {
