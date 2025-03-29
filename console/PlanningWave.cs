@@ -1,4 +1,3 @@
-
 using System.Text;
 
 namespace Planung;
@@ -17,7 +16,7 @@ public sealed class PlanningWave
     public ref float this[int hour, int day, int lession] => ref Wave[hour, day, lession];
 
     public PlanningWave(IEnumerable<Lession> lessions, IEnumerable<Rule> rules)
-        : this(lessions.ToImmutableArray(), rules.ToImmutableArray()) { }
+        : this([.. lessions], [.. rules]) { }
 
     public PlanningWave(ImmutableArray<Lession> kurse, ImmutableArray<Rule> rules)
     {
@@ -125,7 +124,7 @@ public sealed class PlanningWave
     }
 }
 
-public sealed record Kurs(NonEmptyString Name, string Slug, int LessionCount)
+public sealed record Kurs(string Name, string Slug, int LessionCount)
 {
     public string Slug { get; init; } = Slug.Length <= 4 ? Slug.PadRight(4) : throw new ArgumentException();
     public IEnumerable<Lession> CreateLessions() => Enumerable.Range(0, LessionCount).Select(_ => new Lession(this));
