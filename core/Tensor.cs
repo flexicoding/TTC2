@@ -21,11 +21,12 @@ public readonly struct Tensor(int rowCount, int columnCount, int layerCount, flo
 
     internal int GetFlatIndex(int row, int column, int layer)
     {
-#if DEBUG
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(row, RowCount);
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(column, ColumnCount);
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(layer, LayerCount);
-#endif
+        ArgumentOutOfRangeException.ThrowIfNegative(row);
+        ArgumentOutOfRangeException.ThrowIfNegative(column);
+        ArgumentOutOfRangeException.ThrowIfNegative(layer);
 
         return layer * RowCount * ColumnCount + row * ColumnCount + column;
     }

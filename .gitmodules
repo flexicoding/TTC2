@@ -1,0 +1,3 @@
+[submodule "Ametrin.Utils"]
+	path = Ametrin.Utils
+	url = https://github.com/BarionLP/Ametrin.Utils

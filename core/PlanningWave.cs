@@ -10,7 +10,7 @@ public sealed class PlanningWave
     public Lession?[,] FinalPlan { get; }
     public int DayCount { get; }
     public int LessionsPerDay { get; } = 6;
-    private int[] _lessionsOrder;
+    private readonly int[] _lessionsOrder;
 
     public ref float this[int hour, Day day, int lession] => ref Wave[hour, (int)day, lession];
     public ref float this[int hour, int day, int lession] => ref Wave[hour, day, lession];
