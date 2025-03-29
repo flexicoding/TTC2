@@ -1,4 +1,4 @@
-namespace TTC.Console;
+namespace TTC.Core;
 
 public readonly struct Tensor(int rowCount, int columnCount, int layerCount, float[] storage)
 {
@@ -21,12 +21,9 @@ public readonly struct Tensor(int rowCount, int columnCount, int layerCount, flo
 
     internal int GetFlatIndex(int row, int column, int layer)
     {
-        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(row, RowCount);
-        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(column, ColumnCount);
-        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(layer, LayerCount);
-        ArgumentOutOfRangeException.ThrowIfNegative(row);
-        ArgumentOutOfRangeException.ThrowIfNegative(column);
-        ArgumentOutOfRangeException.ThrowIfNegative(layer);
+        Guard.InRange(row, 0, RowCount - 1);
+        Guard.InRange(column, 0, ColumnCount - 1);
+        Guard.InRange(layer, 0, LayerCount - 1);
 
         return layer * RowCount * ColumnCount + row * ColumnCount + column;
     }

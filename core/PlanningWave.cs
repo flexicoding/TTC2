@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace TTC.Console;
+namespace TTC.Core;
 
 public sealed class PlanningWave
 {
@@ -38,6 +38,7 @@ public sealed class PlanningWave
                 Wave[i] = 1;
             }
         }
+        
         foreach (var rule in Rules)
         {
             rule.Apply(this);
@@ -56,11 +57,11 @@ public sealed class PlanningWave
             this[hour, day, i] = 0;
         }
 
-        foreach (var di in ..DayCount)
+        foreach (var dayIndex in ..DayCount)
         {
-            foreach (var hi in ..LessionsPerDay)
+            foreach (var hourIndex in ..LessionsPerDay)
             {
-                this[hi, di, lession] = 0;
+                this[hourIndex, dayIndex, lession] = 0;
             }
         }
 
@@ -102,6 +103,7 @@ public sealed class PlanningWave
             sb.Append(' ');
         }
         sb.AppendLine();
+
         foreach (var hour in ..LessionsPerDay)
         {
             sb.Append($"{hour + 1}. ");
@@ -120,100 +122,7 @@ public sealed class PlanningWave
             sb.AppendLine();
 
         }
+
         return sb.ToString();
     }
-}
-
-public sealed record Kurs(string Name, string Slug, int LessionCount)
-{
-    public string Slug { get; init; } = Slug.Length <= 4 ? Slug.PadRight(4) : throw new ArgumentException();
-    public IEnumerable<Lession> CreateLessions() => Enumerable.Range(0, LessionCount).Select(_ => new Lession(this));
-}
-public sealed record Lession(Kurs Kurs);
-
-public abstract record Rule
-{
-    public abstract void Apply(PlanningWave wave);
-}
-
-public sealed record LessionsAvoidFirstAndLast(float Modifier) : Rule
-{
-    public override void Apply(PlanningWave wave)
-    {
-        foreach (var lession in ..wave.Lessions.Length)
-        {
-            foreach (var day in 0..wave.DayCount)
-            {
-                wave[0, day, lession] *= Modifier;
-                wave[5, day, lession] *= Modifier;
-            }
-        }
-    }
-}
-public sealed record PreventMoreThan5LessionsPerDay : Rule
-{
-    public override void Apply(PlanningWave wave)
-    {
-        foreach (var day in ..wave.DayCount)
-        {
-            var lessionCount = 0;
-            foreach (var hour in ..wave.LessionsPerDay)
-            {
-                if (wave.FinalPlan[hour, day] is not null)
-                {
-                    lessionCount++;
-                }
-            }
-            if (lessionCount >= 5)
-            {
-                foreach (var lession in ..wave.Lessions.Length)
-                {
-                    foreach (var hour in ..wave.LessionsPerDay)
-                    {
-                        wave[hour, day, lession] = 0;
-                    }
-                }
-            }
-        }
-    }
-}
-
-public sealed record AvoidSameKursOnADay(float Modifier) : Rule
-{
-    public override void Apply(PlanningWave wave)
-    {
-        foreach (var day in 0..wave.DayCount)
-        {
-            foreach (var hour in ..wave.LessionsPerDay)
-            {
-                if (wave.FinalPlan[hour, day] is Lession lession)
-                {
-                    foreach (var li in ..wave.Lessions.Length)
-                    {
-                        if (wave.Lessions[li].Kurs == lession.Kurs)
-                        {
-                            foreach (var hi in ..wave.LessionsPerDay)
-                            {
-                                wave[hi, day, li] *= Modifier;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-public enum Day
-{
-    AMontag = 0,
-    ADienstag = 1,
-    AMittwoch = 2,
-    ADonnerstag = 3,
-    AFreitag = 4,
-    ASamstag = 5,
-    BMontag = 6,
-    BDienstag = 7,
-    //BMittwoch = 8,
-    //BDonnerstag = 9,
 }

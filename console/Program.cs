@@ -1,5 +1,5 @@
-﻿using TTC.Console;
-
+﻿using TTC.Core;
+using TTC.Core.Rules;
 
 IEnumerable<Kurs> kurse = [
     new Kurs("Ethik 5", "Eth5", 5),
