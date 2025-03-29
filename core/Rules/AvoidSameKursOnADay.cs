@@ -6,19 +6,14 @@ public sealed record AvoidSameKursOnADay(float Modifier) : Rule
     {
         foreach (var day in 0..wave.DayCount)
         {
-            foreach (var hour in ..wave.LessionsPerDay)
+            foreach (var hour in ..wave.HoursPerDay)
             {
-                if (wave.FinalPlan[hour, day] is Lession lession)
+                if (wave.FinalPlan[hour, day] is Kurs kurs)
                 {
-                    foreach (var li in ..wave.Lessions.Length)
+                    var kursIndex = wave.Kurse.IndexOf(kurs);
+                    foreach (var hi in ..wave.HoursPerDay)
                     {
-                        if (wave.Lessions[li].Kurs == lession.Kurs)
-                        {
-                            foreach (var hi in ..wave.LessionsPerDay)
-                            {
-                                wave[hi, day, li] *= Modifier;
-                            }
-                        }
+                        wave[hi, day, kursIndex] *= Modifier;
                     }
                 }
             }

@@ -15,11 +15,12 @@ IEnumerable<Kurs> kurse = [
     new Kurs("Geschichte 2", "Ges3", 2),
 ];
 
-var wave = new PlanningWave(kurse.SelectMany(kurs => kurs.CreateLessions()),
+var wave = new PlanningWave(kurse,
 [
     new LessionsAvoidFirstAndLast(0.5f),
     new AvoidSameKursOnADay(0.1f),
     new PreventMoreThan5LessionsPerDay(),
+    new NoLessionsOnDay(Day.ASonntag),
 ]);
 
 wave.ApplyRules();

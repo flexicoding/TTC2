@@ -1,32 +1,33 @@
+using System.Diagnostics;
 using System.Text;
 
 namespace TTC.Core;
 
 public sealed class PlanningWave
 {
-    public ImmutableArray<Lession> Lessions { get; }
+    public ImmutableArray<Kurs> Kurse { get; }
     public ImmutableArray<Rule> Rules { get; }
     public Tensor Wave { get; }
-    public Lession?[,] FinalPlan { get; }
+    public Kurs?[,] FinalPlan { get; }
     public int DayCount { get; }
-    public int LessionsPerDay { get; } = 6;
-    private readonly int[] _lessionsOrder;
+    public int HoursPerDay { get; } = 6;
+    private readonly int[] _kurseOrder;
 
     public ref float this[int hour, Day day, int lession] => ref Wave[hour, (int)day, lession];
     public ref float this[int hour, int day, int lession] => ref Wave[hour, day, lession];
 
-    public PlanningWave(IEnumerable<Lession> lessions, IEnumerable<Rule> rules)
+    public PlanningWave(IEnumerable<Kurs> lessions, IEnumerable<Rule> rules)
         : this([.. lessions], [.. rules]) { }
 
-    public PlanningWave(ImmutableArray<Lession> kurse, ImmutableArray<Rule> rules)
+    public PlanningWave(ImmutableArray<Kurs> kurse, ImmutableArray<Rule> rules)
     {
         DayCount = Enum.GetValues<Day>().Length;
-        Lessions = Guard.ThrowIfNullOrEmpty(kurse);
-        FinalPlan = new Lession?[LessionsPerDay, DayCount];
-        Wave = Tensor.Create(LessionsPerDay, DayCount, kurse.Length);
+        Kurse = Guard.ThrowIfNullOrEmpty(kurse);
+        FinalPlan = new Kurs?[HoursPerDay, DayCount];
+        Wave = Tensor.Create(HoursPerDay, DayCount, kurse.Length);
         Wave.Fill(1);
         Rules = rules;
-        _lessionsOrder = Enumerable.Range(0, Lessions.Length).ToArray();
+        _kurseOrder = [.. Enumerable.Range(0, Kurse.Length)];
     }
 
     public void ApplyRules()
@@ -38,7 +39,7 @@ public sealed class PlanningWave
                 Wave[i] = 1;
             }
         }
-        
+
         foreach (var rule in Rules)
         {
             rule.Apply(this);
@@ -47,39 +48,54 @@ public sealed class PlanningWave
 
     public bool CollapsNext()
     {
-        var (hour, day, lession) = IndexOfMaximum();
+        var (hour, day, kursIndex) = IndexOfMaximum();
 
-        if (lession < 0) return false;
+        if (kursIndex < 0) return false;
 
-        FinalPlan[hour, day] = Lessions[lession];
-        foreach (var i in ..Lessions.Length)
+        var kurs = Kurse[kursIndex];
+        FinalPlan[hour, day] = kurs;
+        foreach (var i in ..Kurse.Length)
         {
             this[hour, day, i] = 0;
         }
 
-        foreach (var dayIndex in ..DayCount)
+        var count = CountKurs(Kurse[kursIndex]);
+
+        if (count > kurs.LessionCount)
         {
-            foreach (var hourIndex in ..LessionsPerDay)
+            throw new UnreachableException();
+        }
+
+        if (count == kurs.LessionCount)
+        {
+            foreach (var dayIndex in ..DayCount)
             {
-                this[hourIndex, dayIndex, lession] = 0;
+                foreach (var hourIndex in ..HoursPerDay)
+                {
+                    this[hourIndex, dayIndex, kursIndex] = 0;
+                }
             }
         }
 
         return true;
     }
 
+    public int CountKurs(Kurs kurs) => FinalPlan.Cast<Kurs?>().Where(l => l == kurs).Count();
+
     public (int hour, int day, int lession) IndexOfMaximum()
     {
         int mhour = -1, mday = -1, mlession = -1;
         float value = 0;
 
-        Random.Shared.Shuffle(_lessionsOrder);
+        // we shuffle to prevent the function from always giving back the first maximum.
+        // this appears to be enough randomness to generate a variety of time tables
+        Random.Shared.Shuffle(_kurseOrder);
 
-        foreach (var lession in _lessionsOrder)
+        foreach (var lession in _kurseOrder)
         {
             foreach (var day in ..DayCount)
             {
-                foreach (var hour in ..LessionsPerDay)
+                foreach (var hour in ..HoursPerDay)
                 {
                     if (this[hour, day, lession] > value)
                     {
@@ -93,6 +109,23 @@ public sealed class PlanningWave
         return (mhour, mday, mlession);
     }
 
+    public void ApplyRule(Func<int, Day, Kurs, bool> predicate, Func<float, float> modifier)
+    {
+        foreach (var day in ..DayCount)
+        {
+            foreach (var hour in ..HoursPerDay)
+            {
+                foreach (var kursIndex in _kurseOrder)
+                {
+                    if (predicate(hour, (Day)day, Kurse[kursIndex]))
+                    {
+                        this[hour, day, kursIndex] = modifier(this[hour, day, kursIndex]);
+                    }
+                }
+            }
+        }
+    }
+
     public string ToString(int lession)
     {
         var sb = new StringBuilder();
@@ -104,14 +137,14 @@ public sealed class PlanningWave
         }
         sb.AppendLine();
 
-        foreach (var hour in ..LessionsPerDay)
+        foreach (var hour in ..HoursPerDay)
         {
             sb.Append($"{hour + 1}. ");
             foreach (var day in ..DayCount)
             {
-                if (FinalPlan[hour, day] is Lession collapsed)
+                if (FinalPlan[hour, day] is Kurs collapsed)
                 {
-                    sb.Append(collapsed.Kurs.Slug);
+                    sb.Append(collapsed.Slug);
                 }
                 else
                 {

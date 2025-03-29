@@ -6,19 +6,13 @@ public sealed record PreventMoreThan5LessionsPerDay : Rule
     {
         foreach (var day in ..wave.DayCount)
         {
-            var lessionCount = 0;
-            foreach (var hour in ..wave.LessionsPerDay)
-            {
-                if (wave.FinalPlan[hour, day] is not null)
-                {
-                    lessionCount++;
-                }
-            }
+            var lessionCount = Enumerable.Range(0, wave.HoursPerDay).Count(hour => wave.FinalPlan[hour, day] is not null);
+
             if (lessionCount >= 5)
             {
-                foreach (var lession in ..wave.Lessions.Length)
+                foreach (var lession in ..wave.Kurse.Length)
                 {
-                    foreach (var hour in ..wave.LessionsPerDay)
+                    foreach (var hour in ..wave.HoursPerDay)
                     {
                         wave[hour, day, lession] = 0;
                     }

@@ -27,5 +27,4 @@ public readonly struct Tensor(int rowCount, int columnCount, int layerCount, flo
 
         return layer * RowCount * ColumnCount + row * ColumnCount + column;
     }
-
 }

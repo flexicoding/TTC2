@@ -8,8 +8,9 @@ public enum Day
     ADonnerstag = 3,
     AFreitag = 4,
     ASamstag = 5,
-    BMontag = 6,
-    BDienstag = 7,
-    //BMittwoch = 8,
-    //BDonnerstag = 9,
+    ASonntag = 6,
+    BMontag = 7,
+    BDienstag = 8,
+    BMittwoch = 9,
+    BDonnerstag = 10,
 }
