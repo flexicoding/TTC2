@@ -4,7 +4,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Folder Name="/src/" />
   <Project Path="Ametrin.Utils/src/Ametrin.Utils.csproj" />
   <Project Path="console/TTC.Console.csproj" />
   <Project Path="core/TTC.Core.csproj" />
