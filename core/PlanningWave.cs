@@ -7,10 +7,12 @@ public sealed class PlanningWave
 {
     public ImmutableArray<Kurs> Kurse { get; }
     public ImmutableArray<Rule> Rules { get; }
+    public ImmutableArray<Person> People { get; }
     public Tensor Wave { get; }
-    public Kurs?[,] FinalPlan { get; }
+    public List<Kurs>[,] FinalPlan { get; }
     public int DayCount { get; }
     public int HoursPerDay { get; } = 6;
+    public Random Random { get; init; } = Random.Shared;
     private readonly int[] _kurseOrder;
 
     public ref float this[int hour, Day day, int lession] => ref Wave[hour, (int)day, lession];
@@ -23,7 +25,15 @@ public sealed class PlanningWave
     {
         DayCount = Enum.GetValues<Day>().Length;
         Kurse = Guard.ThrowIfNullOrEmpty(kurse);
-        FinalPlan = new Kurs?[HoursPerDay, DayCount];
+        People = [.. kurse.SelectMany(k => k.People).Distinct()];
+        FinalPlan = new List<Kurs>[HoursPerDay, DayCount];
+        foreach (var day in ..DayCount)
+        {
+            foreach (var hour in ..HoursPerDay)
+            {
+                FinalPlan[hour, day] = [];
+            }
+        }
         Wave = Tensor.Create(HoursPerDay, DayCount, kurse.Length);
         Wave.Fill(1);
         Rules = rules;
@@ -53,11 +63,7 @@ public sealed class PlanningWave
         if (kursIndex < 0) return false;
 
         var kurs = Kurse[kursIndex];
-        FinalPlan[hour, day] = kurs;
-        foreach (var i in ..Kurse.Length)
-        {
-            this[hour, day, i] = 0;
-        }
+        FinalPlan[hour, day].Add(kurs);
 
         var count = CountKurs(Kurse[kursIndex]);
 
@@ -80,7 +86,7 @@ public sealed class PlanningWave
         return true;
     }
 
-    public int CountKurs(Kurs kurs) => FinalPlan.Cast<Kurs?>().Where(l => l == kurs).Count();
+    public int CountKurs(Kurs kurs) => FinalPlan.Cast<List<Kurs>>().Count(l => l.Contains(kurs));
 
     public (int hour, int day, int lession) IndexOfMaximum()
     {
@@ -89,7 +95,7 @@ public sealed class PlanningWave
 
         // we shuffle to prevent the function from always giving back the first maximum.
         // this appears to be enough randomness to generate a variety of time tables
-        Random.Shared.Shuffle(_kurseOrder);
+        Random.Shuffle(_kurseOrder);
 
         foreach (var lession in _kurseOrder)
         {
@@ -142,9 +148,9 @@ public sealed class PlanningWave
             sb.Append($"{hour + 1}. ");
             foreach (var day in ..DayCount)
             {
-                if (FinalPlan[hour, day] is Kurs collapsed)
+                if (FinalPlan[hour, day].Count > 0)
                 {
-                    sb.Append(collapsed.Slug);
+                    sb.Append(FinalPlan[hour, day][0].Slug);
                 }
                 else
                 {
@@ -157,5 +163,33 @@ public sealed class PlanningWave
         }
 
         return sb.ToString();
+    }
+
+    public bool Validate()
+    {
+        foreach (var kurs in Kurse)
+        {
+            var count = CountKurs(kurs);
+            if (count != kurs.LessionCount)
+            {
+                Console.WriteLine($"{kurs.Name} has {count} instead of {kurs.LessionCount}");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void Reset()
+    {
+        foreach (var day in ..DayCount)
+        {
+            foreach (var hour in ..HoursPerDay)
+            {
+                FinalPlan[hour, day].Clear();
+            }
+        }
+
+        Wave.Fill(1);
     }
 }

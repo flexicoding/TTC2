@@ -8,7 +8,7 @@ public sealed record AvoidSameKursTwiceADay(float Modifier) : Rule
         {
             foreach (var hour in ..wave.HoursPerDay)
             {
-                if (wave.FinalPlan[hour, day] is Kurs kurs)
+                foreach (var kurs in wave.FinalPlan[hour, day])
                 {
                     var kursIndex = wave.Kurse.IndexOf(kurs);
                     foreach (var hi in ..wave.HoursPerDay)
