@@ -17,10 +17,10 @@ IEnumerable<Kurs> kurse = [
 
 var wave = new PlanningWave(kurse,
 [
-    new LessionsAvoidFirstAndLast(0.5f),
-    new AvoidSameKursOnADay(0.1f),
-    new PreventMoreThan5LessionsPerDay(),
-    new NoLessionsOnDay(Day.ASonntag),
+    new AvoidFirstAndLastTimeSlot(0.6f),
+    new AvoidSameKursTwiceADay(0.1f),
+    new ReduceLessionsPerDay(5, 0.1f),
+    new NoLessionsOnDays([Day.ASonntag, Day.BFreitag, Day.BSamstag, Day.BSonntag]),
 ]);
 
 wave.ApplyRules();

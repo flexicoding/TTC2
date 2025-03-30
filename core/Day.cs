@@ -13,4 +13,7 @@ public enum Day
     BDienstag = 8,
     BMittwoch = 9,
     BDonnerstag = 10,
+    BFreitag = 11,
+    BSamstag = 12,
+    BSonntag = 13,
 }

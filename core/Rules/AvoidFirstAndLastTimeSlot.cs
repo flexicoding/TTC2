@@ -1,6 +1,6 @@
 namespace TTC.Core.Rules;
 
-public sealed record LessionsAvoidFirstAndLast(float Modifier) : Rule
+public sealed record AvoidFirstAndLastTimeSlot(float Modifier) : Rule
 {
     public override void Apply(PlanningWave wave)
     {

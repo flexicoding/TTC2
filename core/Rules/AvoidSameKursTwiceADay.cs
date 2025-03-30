@@ -1,6 +1,6 @@
 namespace TTC.Core.Rules;
 
-public sealed record AvoidSameKursOnADay(float Modifier) : Rule
+public sealed record AvoidSameKursTwiceADay(float Modifier) : Rule
 {
     public override void Apply(PlanningWave wave)
     {
