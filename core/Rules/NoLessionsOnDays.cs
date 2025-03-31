@@ -4,6 +4,6 @@ public sealed record NoLessionsOnDays(HashSet<Day> Days) : Rule
 {
     public override void Apply(PlanningWave wave)
     {
-        wave.ApplyRule((_, day, _) => Days.Contains(day), static _ => 0);
+        wave.EachSlot((_, day, _) => Days.Contains(day), static _ => 0);
     }
 }

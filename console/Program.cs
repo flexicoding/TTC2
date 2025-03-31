@@ -69,9 +69,9 @@ IEnumerable<Kurs> kurse = [
 
 var wave = new PlanningWave(kurse,
 [
-    new AvoidFirstAndLastTimeSlot(0.6f),
+    new ModifyTimeSlots([0.6f, 1, 1, 1, 1, 0.6f, 0.1f, 0.05f]),
     new AvoidSameKursTwiceADay(0.1f),
-    new ReduceLessionsPerDay(5, 0.1f),
+    new ReduceLessionsPerDay(5, 0.01f),
     new NoLessionsOnDays([Day.ASonntag, Day.BFreitag, Day.BSamstag, Day.BSonntag]),
     new RequireOneLessionPerPersonPerSlot(),
 ])

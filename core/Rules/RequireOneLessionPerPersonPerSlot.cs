@@ -6,7 +6,7 @@ public sealed record RequireOneLessionPerPersonPerSlot : Rule
     {
         foreach (var day in ..wave.DayCount)
         {
-            foreach (var hour in ..wave.HoursPerDay)
+            foreach (var hour in ..wave.SlotsPerDay)
             {
                 foreach (var kurs in wave.FinalPlan[hour, day])
                 {

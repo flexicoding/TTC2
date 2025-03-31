@@ -11,7 +11,7 @@ public sealed class PlanningWave
     public Tensor Wave { get; }
     public List<Kurs>[,] FinalPlan { get; }
     public int DayCount { get; }
-    public int HoursPerDay { get; } = 6;
+    public int SlotsPerDay { get; } = 8;
     public Random Random { get; init; } = Random.Shared;
     private readonly int[] _kurseOrder;
 
@@ -26,15 +26,15 @@ public sealed class PlanningWave
         DayCount = Enum.GetValues<Day>().Length;
         Kurse = Guard.ThrowIfNullOrEmpty(kurse);
         People = [.. kurse.SelectMany(k => k.People).Distinct()];
-        FinalPlan = new List<Kurs>[HoursPerDay, DayCount];
+        FinalPlan = new List<Kurs>[SlotsPerDay, DayCount];
         foreach (var day in ..DayCount)
         {
-            foreach (var hour in ..HoursPerDay)
+            foreach (var hour in ..SlotsPerDay)
             {
                 FinalPlan[hour, day] = [];
             }
         }
-        Wave = Tensor.Create(HoursPerDay, DayCount, kurse.Length);
+        Wave = Tensor.Create(SlotsPerDay, DayCount, kurse.Length);
         Wave.Fill(1);
         Rules = rules;
         _kurseOrder = [.. Enumerable.Range(0, Kurse.Length)];
@@ -67,16 +67,16 @@ public sealed class PlanningWave
 
         var count = CountKurs(Kurse[kursIndex]);
 
-        if (count > kurs.LessionCount)
+        if (count > kurs.LessionsPerTurnus)
         {
             throw new UnreachableException();
         }
 
-        if (count == kurs.LessionCount)
+        if (count == kurs.LessionsPerTurnus)
         {
             foreach (var dayIndex in ..DayCount)
             {
-                foreach (var hourIndex in ..HoursPerDay)
+                foreach (var hourIndex in ..SlotsPerDay)
                 {
                     this[hourIndex, dayIndex, kursIndex] = 0;
                 }
@@ -101,7 +101,7 @@ public sealed class PlanningWave
         {
             foreach (var day in ..DayCount)
             {
-                foreach (var hour in ..HoursPerDay)
+                foreach (var hour in ..SlotsPerDay)
                 {
                     if (this[hour, day, lession] > value)
                     {
@@ -115,11 +115,11 @@ public sealed class PlanningWave
         return (mhour, mday, mlession);
     }
 
-    public void ApplyRule(Func<int, Day, Kurs, bool> predicate, Func<float, float> modifier)
+    public void EachSlot(Func<int, Day, Kurs, bool> predicate, Func<float, float> modifier)
     {
         foreach (var day in ..DayCount)
         {
-            foreach (var hour in ..HoursPerDay)
+            foreach (var hour in ..SlotsPerDay)
             {
                 foreach (var kursIndex in _kurseOrder)
                 {
@@ -132,18 +132,32 @@ public sealed class PlanningWave
         }
     }
 
-    public string ToString(int lession)
+    public void EachSlot(Func<int, Day, Kurs, float, float> modifier)
+    {
+        foreach (var day in ..DayCount)
+        {
+            foreach (var hour in ..SlotsPerDay)
+            {
+                foreach (var kursIndex in _kurseOrder)
+                {
+                    this[hour, day, kursIndex] = modifier(hour, (Day)day, Kurse[kursIndex], this[hour, day, kursIndex]);
+                }
+            }
+        }
+    }
+
+    public string ToString(int kurs)
     {
         var sb = new StringBuilder();
         sb.Append($"   ");
         foreach (var day in ..DayCount)
         {
-            sb.Append(((Day)day).ToString()[..4]);
+            sb.Append(((Day)day).ToString()[..5]);
             sb.Append(' ');
         }
         sb.AppendLine();
 
-        foreach (var hour in ..HoursPerDay)
+        foreach (var hour in ..SlotsPerDay)
         {
             sb.Append($"{hour + 1}. ");
             foreach (var day in ..DayCount)
@@ -154,7 +168,7 @@ public sealed class PlanningWave
                 }
                 else
                 {
-                    sb.Append(this[hour, day, lession].ToString("F2"));
+                    sb.Append(this[hour, day, kurs].ToString("F3"));
                 }
                 sb.Append(' ');
             }
@@ -170,9 +184,9 @@ public sealed class PlanningWave
         foreach (var kurs in Kurse)
         {
             var count = CountKurs(kurs);
-            if (count != kurs.LessionCount)
+            if (count != kurs.LessionsPerTurnus)
             {
-                Console.WriteLine($"{kurs.Name} has {count} instead of {kurs.LessionCount}");
+                Console.WriteLine($"{kurs.Name} has {count} instead of {kurs.LessionsPerTurnus}");
                 return false;
             }
         }
@@ -184,7 +198,7 @@ public sealed class PlanningWave
     {
         foreach (var day in ..DayCount)
         {
-            foreach (var hour in ..HoursPerDay)
+            foreach (var hour in ..SlotsPerDay)
             {
                 FinalPlan[hour, day].Clear();
             }

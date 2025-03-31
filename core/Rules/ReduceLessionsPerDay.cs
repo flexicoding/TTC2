@@ -8,13 +8,13 @@ public sealed record ReduceLessionsPerDay(int MaxLessionsPerDayPerPerson, float 
         {
             foreach (var person in wave.People)
             {
-                var lessionCount = Enumerable.Range(0, wave.HoursPerDay).Count(hour => wave.FinalPlan[hour, day].Any(k => k.People.Contains(person)));
+                var lessionCount = Enumerable.Range(0, wave.SlotsPerDay).Count(hour => wave.FinalPlan[hour, day].Any(k => k.People.Contains(person)));
 
                 var factor = lessionCount >= MaxLessionsPerDayPerPerson ? 0 : 1 - ReductionPerLessionPerPerson * lessionCount;
 
                 foreach (var lession in ..wave.Kurse.Length)
                 {
-                    foreach (var hour in ..wave.HoursPerDay)
+                    foreach (var hour in ..wave.SlotsPerDay)
                     {
                         wave[hour, day, lession] *= factor;
                     }
