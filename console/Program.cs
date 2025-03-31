@@ -1,8 +1,16 @@
-﻿using TTC.Core;
+﻿using System.Text.Json;
+using TTC.Core;
 using TTC.Core.Rules;
 
 // var random = new Random(420);
 var random = Random.Shared;
+
+var jsonOptions = new JsonSerializerOptions()
+{
+    WriteIndented = true,
+};
+
+jsonOptions.Converters.Add(new PersonJsonConverter());
 
 // var jaron = new Person("jaron");
 // var jonathan = new Person("jonathan");
