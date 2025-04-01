@@ -5,6 +5,6 @@
     <Platform Name="x86" />
   </Configurations>
   <Project Path="Ametrin.Utils/src/Ametrin.Utils.csproj" />
-  <Project Path="console/TTC.Console.csproj" />
+  <Project Path="cli/TTC.Cli.csproj" />
   <Project Path="core/TTC.Core.csproj" />
 </Solution>

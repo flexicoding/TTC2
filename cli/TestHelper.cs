@@ -1,5 +1,4 @@
-
-namespace TTC.Console;
+namespace TTC.Cli;
 
 internal static class TestHelper
 {
