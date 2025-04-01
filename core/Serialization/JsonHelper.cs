@@ -1,12 +1,18 @@
 using System.IO;
 using System.Text.Json;
-using Ametrin.Serialization;
 
 namespace TTC.Core.Serialization;
 
 public sealed class JsonHelper
 {
     public JsonSerializerOptions Options { get; set; } = JsonSerializerOptions.Default;
+
+    public void WriteCollection<T>(IEnumerable<T> courses, FileInfo output)
+    {
+        using var stream = output.OpenWrite();
+        stream.SetLength(0);
+        JsonSerializer.Serialize(stream, courses, Options);
+    }
 
     public void WriteTimeTable(PlanningWave wave, FileInfo output)
     {
@@ -26,7 +32,14 @@ public sealed class JsonHelper
         var jsonOptions = new JsonSerializerOptions(Options);
         jsonOptions.Converters.Add(new ReducedKursJsonConverter(wave.Courses));
 
-        JsonExtensions.WriteToJsonFile(outputData, output, jsonOptions);
+        using var stream = output.OpenWrite();
+        JsonSerializer.Serialize(stream, outputData, jsonOptions);
+    }
+
+    public IEnumerable<T> ReadCollection<T>(FileInfo input)
+    {
+        using var stream = input.OpenRead();
+        return JsonSerializer.Deserialize<IEnumerable<T>>(stream, Options) ?? throw new JsonException();
     }
 }
 

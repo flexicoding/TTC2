@@ -1,4 +1,3 @@
-global using Ametrin.Guards;
 global using Ametrin.Utils;
 global using TTC.Core;
 global using System;
