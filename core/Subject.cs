@@ -1,6 +1,6 @@
 namespace TTC.Core;
 
-public sealed record Subject(string Name, string Slug, int LessionsPerTurnus, FrozenSet<Person> Teachers, FrozenSet<Person> Students)
+public sealed record Subject(string Slug, int LessionsPerTurnus, FrozenSet<Person> Teachers, FrozenSet<Person> Students)
 {
     public string Slug { get; init; } = Slug.Length <= 4 ? Slug.PadLeft(4) : throw new ArgumentException();
 
@@ -15,10 +15,9 @@ public sealed record Subject(string Name, string Slug, int LessionsPerTurnus, Fr
 
         foreach (var i in ..(kursCount - 1))
         {
-            yield return new Kurs(Name, $"{Slug}.{i + 1}", LessionsPerTurnus, [Teachers.GetRandomElement(random), .. students.AsSpan(averageStudentCount * i, averageStudentCount)]);
+            yield return new Kurs($"{Slug}.{i + 1}", LessionsPerTurnus, [Teachers.ElementAt(i % Teachers.Count), .. students.AsSpan(averageStudentCount * i, averageStudentCount)]);
         }
 
-        yield return new Kurs(Name, $"{Slug}.{kursCount}", LessionsPerTurnus, [Teachers.GetRandomElement(random), .. students.AsSpan(averageStudentCount * (kursCount - 1))]);
-
+        yield return new Kurs($"{Slug}.{kursCount}", LessionsPerTurnus, [Teachers.ElementAt((kursCount-1) % Teachers.Count), .. students.AsSpan(averageStudentCount * (kursCount - 1))]);
     }
 }

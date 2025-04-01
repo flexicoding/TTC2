@@ -25,6 +25,10 @@ public sealed class PlanningWave
     {
         DayCount = Enum.GetValues<Day>().Length;
         Kurse = Guard.ThrowIfNullOrEmpty(kurse);
+        if (Kurse.Select(k => k.Slug).SelectDuplicates().Any())
+        {
+            throw new ArgumentException("Kurse contains duplicates", nameof(kurse));
+        }
         People = [.. kurse.SelectMany(k => k.People).Distinct()];
         FinalPlan = new List<Kurs>[SlotsPerDay, DayCount];
         foreach (var day in ..DayCount)
@@ -186,8 +190,23 @@ public sealed class PlanningWave
             var count = CountKurs(kurs);
             if (count != kurs.LessionsPerTurnus)
             {
-                Console.WriteLine($"{kurs.Name} has {count} instead of {kurs.LessionsPerTurnus}");
+                Console.WriteLine($"{kurs.Slug} has {count} lessions per turnus instead of {kurs.LessionsPerTurnus}");
                 return false;
+            }
+        }
+
+        foreach (var person in People)
+        {
+            foreach (var day in ..DayCount)
+            {
+                foreach (var slot in ..SlotsPerDay)
+                {
+                    if (FinalPlan[slot, day].Count(k => k.People.Contains(person)) > 1)
+                    {
+                        Console.WriteLine($"{person.ID} has more than one lession on {(Day)day} {slot}.");
+                        return false;
+                    }
+                }
             }
         }
 
