@@ -1,18 +1,18 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace TTC.Console;
+namespace TTC.Core.Serialization;
 
-public sealed class ReducedKursJsonConverter(IEnumerable<Kurs> kurse) : JsonConverter<Kurs>
+public sealed class ReducedKursJsonConverter(IEnumerable<Course> kurse) : JsonConverter<Course>
 {
-    public FrozenDictionary<string, Kurs> Kurse { get; } = kurse.ToFrozenDictionary(k => k.Slug);
+    public FrozenDictionary<string, Course> Courses { get; } = kurse.ToFrozenDictionary(k => k.Slug);
 
-    public override Kurs? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override Course? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        return Kurse[reader.GetString() ?? throw new JsonException()];
+        return Courses[reader.GetString() ?? throw new JsonException()];
     }
 
-    public override void Write(Utf8JsonWriter writer, Kurs value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, Course value, JsonSerializerOptions options)
     {
         writer.WriteStringValue(value.Slug);
     }

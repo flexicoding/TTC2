@@ -1,6 +1,6 @@
 namespace TTC.Core.Rules;
 
-public sealed record RequireOneLessionPerPersonPerSlot : Rule
+public sealed class RequireOneLessionPerPersonPerSlot : Rule
 {
     public override void Apply(PlanningWave wave)
     {
@@ -8,15 +8,15 @@ public sealed record RequireOneLessionPerPersonPerSlot : Rule
         {
             foreach (var hour in ..wave.SlotsPerDay)
             {
-                foreach (var kurs in wave.FinalPlan[hour, day])
+                foreach (var course in wave.FinalPlan[hour, day])
                 {
-                    foreach (var person in kurs.People)
+                    foreach (var person in course.People)
                     {
-                        foreach (var otherKurs in ..wave.Kurse.Length)
+                        foreach (var otherCourse in ..wave.Courses.Length)
                         {
-                            if (wave.Kurse[otherKurs].People.Contains(person))
+                            if (wave.Courses[otherCourse].People.Contains(person))
                             {
-                                wave[hour, day, otherKurs] = 0;
+                                wave[hour, day, otherCourse] = 0;
                             }
                         }
                     }

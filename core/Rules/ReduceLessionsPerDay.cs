@@ -1,7 +1,10 @@
 namespace TTC.Core.Rules;
 
-public sealed record ReduceLessionsPerDay(int MaxLessionsPerDayPerPerson, float ReductionPerLessionPerPerson) : Rule
+public sealed class ReduceLessionsPerDay(int MaxLessionsPerDayPerPerson, float ReductionPerLessionPerPerson) : Rule
 {
+    public int MaxLessionsPerDayPerPerson { get; } = MaxLessionsPerDayPerPerson;
+    public float ReductionPerLessionPerPerson { get; } = ReductionPerLessionPerPerson;
+
     public override void Apply(PlanningWave wave)
     {
         foreach (var day in ..wave.DayCount)
@@ -12,11 +15,11 @@ public sealed record ReduceLessionsPerDay(int MaxLessionsPerDayPerPerson, float 
 
                 var factor = lessionCount >= MaxLessionsPerDayPerPerson ? 0 : 1 - ReductionPerLessionPerPerson * lessionCount;
 
-                foreach (var lession in ..wave.Kurse.Length)
+                foreach (var course in ..wave.Courses.Length)
                 {
                     foreach (var hour in ..wave.SlotsPerDay)
                     {
-                        wave[hour, day, lession] *= factor;
+                        wave[hour, day, course] *= factor;
                     }
                 }
             }

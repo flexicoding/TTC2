@@ -5,11 +5,11 @@ namespace TTC.Core;
 
 public sealed class PlanningWave
 {
-    public ImmutableArray<Kurs> Kurse { get; }
+    public ImmutableArray<Course> Courses { get; }
     public ImmutableArray<Rule> Rules { get; }
     public ImmutableArray<Person> People { get; }
     public Tensor Wave { get; }
-    public List<Kurs>[,] FinalPlan { get; }
+    public List<Course>[,] FinalPlan { get; }
     public int DayCount { get; }
     public int SlotsPerDay { get; } = 8;
     public Random Random { get; init; } = Random.Shared;
@@ -18,19 +18,19 @@ public sealed class PlanningWave
     public ref float this[int hour, Day day, int lession] => ref Wave[hour, (int)day, lession];
     public ref float this[int hour, int day, int lession] => ref Wave[hour, day, lession];
 
-    public PlanningWave(IEnumerable<Kurs> lessions, IEnumerable<Rule> rules)
-        : this([.. lessions], [.. rules]) { }
+    public PlanningWave(IEnumerable<Course> courses, IEnumerable<Rule> rules)
+        : this([.. courses], [.. rules]) { }
 
-    public PlanningWave(ImmutableArray<Kurs> kurse, ImmutableArray<Rule> rules)
+    public PlanningWave(ImmutableArray<Course> courses, ImmutableArray<Rule> rules)
     {
         DayCount = Enum.GetValues<Day>().Length;
-        Kurse = Guard.ThrowIfNullOrEmpty(kurse);
-        if (Kurse.Select(k => k.Slug).SelectDuplicates().Any())
+        Courses = Guard.ThrowIfNullOrEmpty(courses);
+        if (Courses.Select(k => k.Slug).SelectDuplicates().Any())
         {
-            throw new ArgumentException("Kurse contains duplicates", nameof(kurse));
+            throw new ArgumentException("Kurse contains duplicates", nameof(courses));
         }
-        People = [.. kurse.SelectMany(k => k.People).Distinct()];
-        FinalPlan = new List<Kurs>[SlotsPerDay, DayCount];
+        People = [.. courses.SelectMany(k => k.People).Distinct()];
+        FinalPlan = new List<Course>[SlotsPerDay, DayCount];
         foreach (var day in ..DayCount)
         {
             foreach (var hour in ..SlotsPerDay)
@@ -38,10 +38,10 @@ public sealed class PlanningWave
                 FinalPlan[hour, day] = [];
             }
         }
-        Wave = Tensor.Create(SlotsPerDay, DayCount, kurse.Length);
+        Wave = Tensor.Create(SlotsPerDay, DayCount, courses.Length);
         Wave.Fill(1);
         Rules = rules;
-        _kurseOrder = [.. Enumerable.Range(0, Kurse.Length)];
+        _kurseOrder = [.. Enumerable.Range(0, Courses.Length)];
     }
 
     public void ApplyRules()
@@ -66,17 +66,17 @@ public sealed class PlanningWave
 
         if (kursIndex < 0) return false;
 
-        var kurs = Kurse[kursIndex];
-        FinalPlan[hour, day].Add(kurs);
+        var course = Courses[kursIndex];
+        FinalPlan[hour, day].Add(course);
 
-        var count = CountKurs(Kurse[kursIndex]);
+        var count = CountCourse(Courses[kursIndex]);
 
-        if (count > kurs.LessionsPerTurnus)
+        if (count > course.LessionsPerTurnus)
         {
             throw new UnreachableException();
         }
 
-        if (count == kurs.LessionsPerTurnus)
+        if (count == course.LessionsPerTurnus)
         {
             foreach (var dayIndex in ..DayCount)
             {
@@ -90,7 +90,7 @@ public sealed class PlanningWave
         return true;
     }
 
-    public int CountKurs(Kurs kurs) => FinalPlan.Cast<List<Kurs>>().Count(l => l.Contains(kurs));
+    public int CountCourse(Course course) => FinalPlan.Cast<List<Course>>().Count(l => l.Contains(course));
 
     public (int hour, int day, int lession) IndexOfMaximum()
     {
@@ -119,38 +119,38 @@ public sealed class PlanningWave
         return (mhour, mday, mlession);
     }
 
-    public void EachSlot(Func<int, Day, Kurs, bool> predicate, Func<float, float> modifier)
+    public void EachSlot(Func<int, Day, Course, bool> predicate, Func<float, float> modifier)
     {
         foreach (var day in ..DayCount)
         {
             foreach (var hour in ..SlotsPerDay)
             {
-                foreach (var kursIndex in _kurseOrder)
+                foreach (var courseIndex in _kurseOrder)
                 {
-                    if (predicate(hour, (Day)day, Kurse[kursIndex]))
+                    if (predicate(hour, (Day)day, Courses[courseIndex]))
                     {
-                        this[hour, day, kursIndex] = modifier(this[hour, day, kursIndex]);
+                        this[hour, day, courseIndex] = modifier(this[hour, day, courseIndex]);
                     }
                 }
             }
         }
     }
 
-    public void EachSlot(Func<int, Day, Kurs, float, float> modifier)
+    public void EachSlot(Func<int, Day, Course, float, float> modifier)
     {
         foreach (var day in ..DayCount)
         {
             foreach (var hour in ..SlotsPerDay)
             {
-                foreach (var kursIndex in _kurseOrder)
+                foreach (var courseIndex in _kurseOrder)
                 {
-                    this[hour, day, kursIndex] = modifier(hour, (Day)day, Kurse[kursIndex], this[hour, day, kursIndex]);
+                    this[hour, day, courseIndex] = modifier(hour, (Day)day, Courses[courseIndex], this[hour, day, courseIndex]);
                 }
             }
         }
     }
 
-    public string ToString(int kurs)
+    public string ToString(int course)
     {
         var sb = new StringBuilder();
         sb.Append($"   ");
@@ -172,7 +172,7 @@ public sealed class PlanningWave
                 }
                 else
                 {
-                    sb.Append(this[hour, day, kurs].ToString("F3"));
+                    sb.Append(this[hour, day, course].ToString("F3"));
                 }
                 sb.Append(' ');
             }
@@ -185,12 +185,12 @@ public sealed class PlanningWave
 
     public bool Validate()
     {
-        foreach (var kurs in Kurse)
+        foreach (var course in Courses)
         {
-            var count = CountKurs(kurs);
-            if (count != kurs.LessionsPerTurnus)
+            var count = CountCourse(course);
+            if (count != course.LessionsPerTurnus)
             {
-                Console.WriteLine($"{kurs.Slug} has {count} lessions per turnus instead of {kurs.LessionsPerTurnus}");
+                Console.WriteLine($"{course.Slug} has {count} lessions per turnus instead of {course.LessionsPerTurnus}");
                 return false;
             }
         }

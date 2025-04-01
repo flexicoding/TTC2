@@ -4,7 +4,7 @@ using Ametrin.Serialization;
 
 namespace TTC.Console;
 
-public static class GenerateKurseCommand
+public static class GenerateCoursesCommand
 {
     public static void Run(string inputPath, Random seed, JsonSerializerOptions options)
     {
@@ -23,7 +23,7 @@ public static class GenerateKurseCommand
     public static void Run(FileInfo input, FileInfo output, Random random, JsonSerializerOptions options)
     {
         var subjects = JsonExtensions.ReadFromJsonFile<ImmutableArray<Subject>>(input, options).OrThrow();
-        var kurse = subjects.SelectMany(s => s.DivideIntoKurse(20, random)).ToImmutableArray();
-        JsonExtensions.WriteToJsonFile(kurse, output, options);
+        var courses = subjects.SelectMany(s => s.DivideIntoCourses(20, random)).ToImmutableArray();
+        JsonExtensions.WriteToJsonFile(courses, output, options);
     }
 }

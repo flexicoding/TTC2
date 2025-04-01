@@ -2,11 +2,17 @@ using System.Diagnostics;
 
 namespace TTC.Core.Rules;
 
-public sealed record ModifyTimeSlots(ImmutableArray<float> Modifiers) : Rule
+/// <summary>
+/// reduce the amount of courses per slot<br/>
+/// multiplies the probability of each slot by <paramref name="modifiers"/>[slot]
+/// </summary>
+public sealed class ModifyTimeSlots(ImmutableArray<float> modifiers) : Rule
 {
+    public ImmutableArray<float> Modifiers { get; } = modifiers;
+
     public override void Apply(PlanningWave wave)
     {
         Debug.Assert(wave.SlotsPerDay == Modifiers.Length);
-        wave.EachSlot((hour, day, kurs, value) => value * Modifiers[hour]);
+        wave.EachSlot((hour, day, course, value) => value * Modifiers[hour]);
     }
 }

@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace TTC.Console;
+namespace TTC.Core.Serialization;
 
 public sealed class FrozenSetJsonConverter<T> : JsonConverter<FrozenSet<T>>
 {
