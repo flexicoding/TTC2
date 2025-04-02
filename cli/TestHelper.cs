@@ -72,12 +72,46 @@ internal static class TestHelper
         ];
     }
 
-    public static IEnumerable<Course> GetRealTestSet()
+    public static IEnumerable<Course> GenerateRealisticTestSet(Random random)
     {
+        var students = Enumerable.Range(0, 60).Select(i => new Person($"Person {i}")).ToImmutableArray();
+
         IEnumerable<Subject> subjects = [
-            new Subject("Mat5", 5, [new("Maier"), new("Fischer")], []),
+            new Subject("Mat5", 5, [new("Maier"), new("Fischer")], [.. students.GetRandomElements(40, random)]),
+            new Subject("Deu5", 5, [new("Schwamm")], [.. students.GetRandomElements(10, random)]),
+            new Subject("Phy5", 5, [new("Brökelmann")], [.. students.GetRandomElements(13, random)]),
+            new Subject("Che5", 5, [new("Richter"), new("Tsalastra"), new("Schönborn")], [.. students.GetRandomElements(35, random)]),
+            new Subject("Bio5", 5, [new("Akst"), new("Schönborn")], [.. students.GetRandomElements(10, random)]),
+            new Subject("Ges5", 5, [new("Heese")], [.. students.GetRandomElements(3, random)]),
+            new Subject("Eth5", 5, [new("Egner")], [.. students.GetRandomElements(9, random)]),
+            new Subject("Rel5", 5, [new("Droesch")], [.. students.GetRandomElements(2, random)]),
+            new Subject("GK5", 5, [new("Weinbrenner")], [.. students.GetRandomElements(2, random)]),
+            new Subject("Wir5", 5, [new("Novak")], [.. students.GetRandomElements(4, random)]),
+            new Subject("Eng5", 5, [new("Weber")], [.. students.GetRandomElements(6, random)]),
+            new Subject("Lat5", 5, [new("Kutscherauer")], [.. students.GetRandomElements(4, random)]),
+            new Subject("Fra5", 5, [new("Kutscherauer")], [.. students.GetRandomElements(4, random)]),
+            new Subject("BK5", 5, [new("Loosing")], [.. students.GetRandomElements(3, random)]),
+            new Subject("Mu5", 5, [new("Schäfer")], [.. students.GetRandomElements(6, random)]),
+            new Subject("SP5", 5, [new("Engel")], [.. students.GetRandomElements(5, random)]),
+
+            new Subject("Mat3", 3, [new("Maier"), new("Weißer")], [.. students.GetRandomElements(20, random)]),
+            new Subject("Deu3", 3, [new("Droysen"), new("Knöpflerseitz"), new("Schwarz"), new("Hieber"), new("Heese")], [.. students.GetRandomElements(50, random)]),
+            new Subject("Phy3", 3, [new("Wedemaier")], [.. students.GetRandomElements(12, random)]),
+            new Subject("Che3", 3, [new("Schönborn")], [.. students.GetRandomElements(10, random)]),
+            new Subject("Bio3", 3, [new("Akst")], [.. students.GetRandomElements(15, random)]),
+            new Subject("Ges3", 3, [new("Heese"), new("Egner"), new("Sarbacher")], [.. students.GetRandomElements(55, random)]),
+            new Subject("Eth3", 3, [new("Weißer"), new("Knöpflerseitz")], [.. students.GetRandomElements(15, random)]),
+            new Subject("Rel3", 3, [new("Droesch")], [.. students.GetRandomElements(8, random)]),
+            new Subject("GK3", 3, [new("Akst")], [.. students.GetRandomElements(50, random)]),
+            new Subject("Eng3", 3, [new("Benz"), new("Kohler")], [.. students.GetRandomElements(50, random)]),
+            new Subject("Lat3", 3, [new("Kutscherauer")], [.. students.GetRandomElements(12, random)]),
+            new Subject("Fra3", 3, [new("Kutscherauer")], [.. students.GetRandomElements(12, random)]),
+            new Subject("BK2", 2, [new("Waidosch")], [.. students.GetRandomElements(30, random)]),
+            new Subject("Mu2", 2, [new("Schäfer")], [.. students.GetRandomElements(30, random)]),
+            new Subject("Sp2", 2, [new("Engel"), new("Schwamm"), new("Weiß")], [.. students.GetRandomElements(50, random)]),
+
         ];
 
-        return [];
+        return subjects.SelectMany(s => s.DivideIntoCourses(20, random));
     }
 }

@@ -37,6 +37,16 @@ public sealed class TimeTableWave
         _kurseOrder = [.. Enumerable.Range(0, Courses.Length)];
     }
 
+    public bool Collapse(bool verbose)
+    {
+        do
+        {
+            ApplyRules();
+        } while (CollapsNext());
+
+        return Validate(verbose);
+    }
+
     public void ApplyRules()
     {
         foreach (var i in ..Wave.FlatCount)
@@ -62,14 +72,21 @@ public sealed class TimeTableWave
         var course = Courses[kursIndex];
         FinalPlan[hour, (Day)day].Add(course);
 
-        var count = CountCourse(Courses[kursIndex]);
+        EnforceLessionCount(kursIndex, course.LessionsPerTurnus);
 
-        if (count > course.LessionsPerTurnus)
+        return true;
+    }
+
+    private void EnforceLessionCount(int kursIndex, int lessionsPerTurnus)
+    {
+        var count = CountCourseLessions(Courses[kursIndex]);
+
+        if (count > lessionsPerTurnus)
         {
-            throw new UnreachableException();
+            throw new UnreachableException("Somehow a course ended up with two many lessions???");
         }
 
-        if (count == course.LessionsPerTurnus)
+        if (count == lessionsPerTurnus)
         {
             foreach (var dayIndex in ..Days.Length)
             {
@@ -79,11 +96,9 @@ public sealed class TimeTableWave
                 }
             }
         }
-
-        return true;
     }
 
-    public int CountCourse(Course course) => FinalPlan.Count(l => l.Contains(course));
+    public int CountCourseLessions(Course course) => FinalPlan.Count(l => l.Contains(course));
 
     public (int hour, int day, int lession) IndexOfMaximum()
     {
@@ -143,6 +158,59 @@ public sealed class TimeTableWave
         }
     }
 
+    public void Reset()
+    {
+        foreach (var day in Days)
+        {
+            foreach (var hour in ..SlotsPerDay)
+            {
+                FinalPlan[hour, day].Clear();
+            }
+        }
+
+        Wave.Fill(1);
+    }
+
+    public bool Validate(bool verbose)
+    {
+        // verify each course has the exact amount of lessions
+        foreach (var course in Courses)
+        {
+            var count = CountCourseLessions(course);
+            if (count != course.LessionsPerTurnus)
+            {
+                WriteLine($"{course.Slug} has {count} lessions per turnus instead of {course.LessionsPerTurnus}");
+                return false;
+            }
+        }
+
+        // verify max one lession per slot per person
+        foreach (var person in People)
+        {
+            foreach (var day in Days)
+            {
+                foreach (var slot in ..SlotsPerDay)
+                {
+                    if (FinalPlan[slot, day].Count(k => k.People.Contains(person)) > 1)
+                    {
+                        WriteLine($"{person.ID} has more than one lession on {day} {slot}.");
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+
+        void WriteLine(string message)
+        {
+            if (verbose)
+            {
+                Console.WriteLine(message);
+            }
+        }
+    }
+
     public string ToString(int course)
     {
         var sb = new StringBuilder();
@@ -174,48 +242,5 @@ public sealed class TimeTableWave
         }
 
         return sb.ToString();
-    }
-
-    public bool Validate()
-    {
-        foreach (var course in Courses)
-        {
-            var count = CountCourse(course);
-            if (count != course.LessionsPerTurnus)
-            {
-                Console.WriteLine($"{course.Slug} has {count} lessions per turnus instead of {course.LessionsPerTurnus}");
-                return false;
-            }
-        }
-
-        foreach (var person in People)
-        {
-            foreach (var day in Days)
-            {
-                foreach (var slot in ..SlotsPerDay)
-                {
-                    if (FinalPlan[slot, day].Count(k => k.People.Contains(person)) > 1)
-                    {
-                        Console.WriteLine($"{person.ID} has more than one lession on {day} {slot}.");
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
-    public void Reset()
-    {
-        foreach (var day in Days)
-        {
-            foreach (var hour in ..SlotsPerDay)
-            {
-                FinalPlan[hour, day].Clear();
-            }
-        }
-
-        Wave.Fill(1);
     }
 }

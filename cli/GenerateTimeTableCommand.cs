@@ -7,7 +7,7 @@ namespace TTC.Cli;
 
 public static class GenerateTimeTableCommand
 {
-    public static void Run(string inputPath, Random random, string? outputPath, string rulesPath, JsonHelper jsonHelper)
+    public static void Run(string inputPath, Random random, string? outputPath, string rulesPath, bool verbose, JsonHelper jsonHelper)
     {
         var input = new FileInfo(inputPath);
         var output = input.Directory!.File(outputPath ?? $"{input.NameWithoutExtension()}_timetable.json");
@@ -21,20 +21,26 @@ public static class GenerateTimeTableCommand
             Random = random
         };
 
-        do
-        {
-            wave.ApplyRules();
-        }
-        while (wave.CollapsNext());
+        var count = 1;
 
-        if (!wave.Validate())
+        while (!wave.Collapse(verbose))
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Failed to generate time table! Try again");
+            if (!verbose)
+            {
+                Console.CursorLeft = 0;
+                Console.CursorTop--;
+            }
+            Console.WriteLine($"Failed to generate time table! Trying again... ({count})");
             Console.ResetColor();
-
-            return;
+            wave.Reset();
+            count++;
         }
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"Successfully generated table ({count} Attempts)");
+        Console.ResetColor();
+
         jsonHelper.WriteTimeTable(wave, output);
     }
 }

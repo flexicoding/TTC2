@@ -32,6 +32,9 @@ outputOption.AddAlias("-o");
 var rulesOption = new Option<string>("--rules", description: "The directory path to the rule configs", getDefaultValue: static () => "Rules");
 rulesOption.AddAlias("-r");
 
+var verboseOption = new Option<bool>("--verbose", description: "prints the issues with each attempt");
+rulesOption.AddAlias("-v");
+
 var inputArgument = new Argument<string>("input");
 
 var root = new RootCommand("Time Table Creator");
@@ -48,7 +51,8 @@ generateTimeTableCommand.AddArgument(inputArgument);
 generateTimeTableCommand.AddOption(outputOption);
 generateTimeTableCommand.AddOption(seedOption);
 generateTimeTableCommand.AddOption(rulesOption);
-generateTimeTableCommand.SetHandler(GenerateTimeTableCommand.Run,inputArgument, seedOption, outputOption, rulesOption, jsonHelperBinder);
+generateTimeTableCommand.AddOption(verboseOption);
+generateTimeTableCommand.SetHandler(GenerateTimeTableCommand.Run,inputArgument, seedOption, outputOption, rulesOption, verboseOption, jsonHelperBinder);
 root.AddCommand(generateTimeTableCommand);
 
 var exportDefaultRulesCommand = new Command("export-default-rules");
@@ -66,7 +70,7 @@ debugCommand.SetHandler(static (random, outputPath, jsonHelper) =>
         return;
     }
 
-    var kurse = TestHelper.GenerateBigTestSet(random).ToArray();
+    var kurse = TestHelper.GenerateRealisticTestSet(random).ToArray();
     jsonHelper.WriteCollection(kurse, new(outputPath));
 }, seedOption, outputOption, jsonHelperBinder);
 root.AddCommand(debugCommand);
