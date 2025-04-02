@@ -7,24 +7,24 @@ public sealed class JsonHelper
 {
     public JsonSerializerOptions Options { get; set; } = JsonSerializerOptions.Default;
 
-    public void WriteCollection<T>(IEnumerable<T> courses, FileInfo output)
+    public void WriteCollection<T>(IEnumerable<T> data, FileInfo output)
     {
         using var stream = output.OpenWrite();
         stream.SetLength(0);
-        JsonSerializer.Serialize(stream, courses, Options);
+        JsonSerializer.Serialize(stream, data, Options);
     }
 
-    public void WriteTimeTable(PlanningWave wave, FileInfo output)
+    public void WriteTimeTable(TimeTableWave wave, FileInfo output)
     {
-        var outputData = new List<TimeTableEntry>(wave.DayCount * wave.SlotsPerDay);
+        var outputData = new List<TimeTableEntry>(wave.Days.Length * wave.SlotsPerDay);
 
-        foreach (var day in ..wave.DayCount)
+        foreach (var day in wave.Days)
         {
             foreach (var slot in ..wave.SlotsPerDay)
             {
                 if (wave.FinalPlan[slot, day].Count > 0)
                 {
-                    outputData.Add(new TimeTableEntry((Day)day, slot, wave.FinalPlan[slot, day]));
+                    outputData.Add(new TimeTableEntry(day, slot, wave.FinalPlan[slot, day]));
                 }
             }
         }
@@ -32,14 +32,26 @@ public sealed class JsonHelper
         var jsonOptions = new JsonSerializerOptions(Options);
         jsonOptions.Converters.Add(new ReducedKursJsonConverter(wave.Courses));
 
-        using var stream = output.OpenWrite();
-        JsonSerializer.Serialize(stream, outputData, jsonOptions);
+        WriteCollection(outputData, output);
     }
 
     public IEnumerable<T> ReadCollection<T>(FileInfo input)
     {
         using var stream = input.OpenRead();
         return JsonSerializer.Deserialize<IEnumerable<T>>(stream, Options) ?? throw new JsonException();
+    }
+
+    public void FillTimeTable(FileInfo input, TimeTableWave wave)
+    {
+        var jsonOptions = new JsonSerializerOptions(Options);
+        jsonOptions.Converters.Add(new ReducedKursJsonConverter(wave.Courses));
+
+        var data = ReadCollection<TimeTableEntry>(input);
+
+        foreach (var entry in data)
+        {
+            wave.FinalPlan[entry.Slot, entry.Day].AddRange(entry.Courses);
+        }
     }
 }
 

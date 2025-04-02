@@ -8,9 +8,9 @@ public sealed class AvoidSameCourseTwiceADay(float modifier) : Rule
 {
     public float Modifier { get; } = modifier;
 
-    public override void Apply(PlanningWave wave)
+    public override void Apply(TimeTableWave wave)
     {
-        foreach (var day in 0..wave.DayCount)
+        foreach (var day in wave.Days)
         {
             foreach (var hour in ..wave.SlotsPerDay)
             {

@@ -16,7 +16,7 @@ public static class GenerateTimeTableCommand
 
         var rules = Directory.EnumerateFiles(rulesPath, "*.json").Select(f => JsonExtensions.ReadFromJsonFile<Rule>(f, jsonHelper.Options).OrThrow());
 
-        var wave = new PlanningWave(kurse, rules)
+        var wave = new TimeTableWave(kurse, rules)
         {
             Random = random
         };

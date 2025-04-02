@@ -2,9 +2,9 @@ namespace TTC.Core.Rules;
 
 public sealed class RequireOneLessionPerPersonPerSlot : Rule
 {
-    public override void Apply(PlanningWave wave)
+    public override void Apply(TimeTableWave wave)
     {
-        foreach (var day in ..wave.DayCount)
+        foreach (var day in wave.Days)
         {
             foreach (var hour in ..wave.SlotsPerDay)
             {

@@ -10,7 +10,7 @@ public sealed class ModifyTimeSlots(ImmutableArray<float> modifiers) : Rule
 {
     public ImmutableArray<float> Modifiers { get; } = modifiers;
 
-    public override void Apply(PlanningWave wave)
+    public override void Apply(TimeTableWave wave)
     {
         Debug.Assert(wave.SlotsPerDay == Modifiers.Length);
         wave.EachSlot((hour, day, course, value) => value * Modifiers[hour]);

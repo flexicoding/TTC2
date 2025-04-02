@@ -8,7 +8,7 @@ public sealed class NoCoursesOnDays(HashSet<Day> days) : Rule
 {
     public HashSet<Day> Days { get; } = days;
 
-    public override void Apply(PlanningWave wave)
+    public override void Apply(TimeTableWave wave)
     {
         wave.EachSlot((_, day, _) => Days.Contains(day), static _ => 0);
     }

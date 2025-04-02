@@ -5,9 +5,9 @@ public sealed class ReduceLessionsPerDay(int MaxLessionsPerDayPerPerson, float R
     public int MaxLessionsPerDayPerPerson { get; } = MaxLessionsPerDayPerPerson;
     public float ReductionPerLessionPerPerson { get; } = ReductionPerLessionPerPerson;
 
-    public override void Apply(PlanningWave wave)
+    public override void Apply(TimeTableWave wave)
     {
-        foreach (var day in ..wave.DayCount)
+        foreach (var day in wave.Days)
         {
             foreach (var person in wave.People)
             {
