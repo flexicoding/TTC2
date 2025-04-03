@@ -2,8 +2,6 @@ namespace TTC.Core;
 
 public sealed record Subject(string Slug, int LessionsPerTurnus, FrozenSet<Person> Teachers, FrozenSet<Person> Students)
 {
-    public string Slug { get; init; } = Slug.Length <= 4 ? Slug.PadLeft(4) : throw new ArgumentException($"Slug '{Slug}' is to long", nameof(Slug));
-
     public IEnumerable<Course> DivideIntoCourses(int averageStudentCount, Random? random = null)
     {
         random ??= Random.Shared;
