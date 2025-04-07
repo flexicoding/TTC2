@@ -85,9 +85,9 @@ internal static class TestHelper
             new Subject("Che5", 5, [new("Richter"), new("Tsalastra"), new("Schönborn")], [.. students.GetRandomElements(35, random)]),
             new Subject("Bio5", 5, [new("Akst"), new("Schönborn")], [.. students.GetRandomElements(10, random)]),
             new Subject("Ges5", 5, [new("Heese")], [.. students.GetRandomElements(3, random)]),
+            new Subject("GK5", 5, [new("Weinbrenner")], [.. students.GetRandomElements(2, random)]),
             new Subject("Eth5", 5, [new("Egner")], [.. students.GetRandomElements(9, random)]),
             new Subject("Rel5", 5, [new("Droesch")], [.. students.GetRandomElements(2, random)]),
-            new Subject("GK5", 5, [new("Weinbrenner")], [.. students.GetRandomElements(2, random)]),
             new Subject("Wir5", 5, [new("Novak")], [.. students.GetRandomElements(4, random)]),
             new Subject("Eng5", 5, [new("Weber")], [.. students.GetRandomElements(6, random)]),
             new Subject("Lat5", 5, [new("Kutscherauer")], [.. students.GetRandomElements(4, random)]),
@@ -102,9 +102,9 @@ internal static class TestHelper
             new Subject("Che3", 3, [new("Schönborn")], [.. students.GetRandomElements(10, random)]),
             new Subject("Bio3", 3, [new("Akst")], [.. students.GetRandomElements(15, random)]),
             new Subject("Ges3", 3, [new("Heese"), new("Egner"), new("Sarbacher")], [.. students.GetRandomElements(55, random)]),
+            new Subject("GK3", 3, [new("Akst")], [.. students.GetRandomElements(50, random)]),
             new Subject("Eth3", 3, [new("Weißer"), new("Knöpflerseitz")], [.. students.GetRandomElements(15, random)]),
             new Subject("Rel3", 3, [new("Droesch")], [.. students.GetRandomElements(8, random)]),
-            new Subject("GK3", 3, [new("Akst")], [.. students.GetRandomElements(50, random)]),
             new Subject("Eng3", 3, [new("Benz"), new("Kohler")], [.. students.GetRandomElements(50, random)]),
             new Subject("Lat3", 3, [new("Kutscherauer")], [.. students.GetRandomElements(12, random)]),
             new Subject("Fra3", 3, [new("Kutscherauer")], [.. students.GetRandomElements(12, random)]),
@@ -130,10 +130,8 @@ internal static class TestHelper
         var d33 = new Course("3d3", 3, ["Knöpfi", "Hendrik", "Sofia", "Pia", "Richard", "Serhii", "Tabitha", "Violet", "William", "Fenja", "Mara", "Nola", "Onyx"]);
         MustContainAll(d51, d31, d32, d33);
 
-
         var py51 = new Course("5Ph1", 5, ["Brökelmann", "Jonathan", "Mara", "Fenja", "Luana", "Kathie", "Felix G", "Felix H", "Josef", "Alex", "Joshua", "Tina", "Mathilda", "Serhii", "Linyi"]);
         var py31 = new Course("3ph1", 3, ["Wedemayer", "Jaron", "Richard", "Pia", "Helen", "Sofiia"]);
-
 
         var ch51 = new Course("5Ch1", 5, ["Tsalastra"]);
         var ch52 = new Course("5Ch2", 5, ["Richter", "Felix G", "Josef", "Muhammed", "Luka", "Linyi", "Annabelle", "Georgy", "Elin", "Jaron", "Mara", "Catelyn", "Felix H", "Tina", "Alexander"]);
@@ -142,11 +140,24 @@ internal static class TestHelper
         var b51 = new Course("5B1", 5, ["Akst"]);
         var b31 = new Course("3b1", 3, ["Akst"]);
 
+        var g51 = new Course("5G1", 3, ["Heese", "Bruno", "Emma W", "Violet"]);
+        var g21 = new Course("2g1", 2, ["Heese", "Bruno", "Emma W", "Violet", "Jonathan", "Lorenz", "Hendrik", "Amelie", "Michael", "Pia", "Marie-M", "Lisa", "Lennard"]);
+        var g22 = new Course("2g2", 2, ["Egner"]);
+        var g23 = new Course("2g3", 2, ["Sarbacher"]);
+        // MustContainAll(g51, g21, g22, g23);
+
+        var gk51 = new Course("5GK1", 5, [""]);
+        var gk21 = new Course("2gk1", 2, ["Akst"]);
+        var gk22 = new Course("2gk2", 2, ["Akst", "Nola", "Miriana", "Michael", "Luana", "Juliane", "Johanna", "Tabita", "Marie-M", "Katharina", "Moana", "Marie", "Emma W", "Lisa", "Fenja", "Helen", "Bruno", "Jonathan", "Matilda", "Violet", "Lea", "Clara"]);
+        MustContainAll(gk51, gk21, gk22);
+
         return [
             m51, m52, m31,
             d51, d31, d32, d33,
             py51, py31,
             ch51, ch52, ch31,
+            b51, b31,
+            g51, g21, g22, g23,
         ];
 
         static void MustContainAll(params IEnumerable<Course> courses)
