@@ -136,7 +136,7 @@ internal static class TestHelper
 
 
         var ch51 = new Course("5Ch1", 5, ["Tsalastra"]);
-        var ch52 = new Course("5Ch2", 5, ["Richter"]);
+        var ch52 = new Course("5Ch2", 5, ["Richter", "Felix G", "Josef", "Muhammed", "Luka", "Linyi", "Annabelle", "Georgy", "Elin", "Jaron", "Mara", "Catelyn", "Felix H", "Tina", "Alexander"]);
         var ch31 = new Course("3ch1", 3, ["Schönborn"]);
 
         var b51 = new Course("5B1", 5, ["Akst"]);
