@@ -151,6 +151,38 @@ internal static class TestHelper
         var gk22 = new Course("2gk2", 2, ["Akst", "Nola", "Miriana", "Michael", "Luana", "Juliane", "Johanna", "Tabita", "Marie-M", "Katharina", "Moana", "Marie", "Emma W", "Lisa", "Fenja", "Helen", "Bruno", "Jonathan", "Matilda", "Violet", "Lea", "Clara"]);
         MustContainAll(gk51, gk21, gk22);
 
+        var eth51 = new Course("5Eth1", 5, ["Egner", "Pia", "Amelie", "Michael", "Marie-M", "Lorenz", "Lisa", "Helen", "Hendrik", "Jonathan"]);
+        var eth21 = new Course("2eth1", 2, ["Weißer"]);
+        var eth22 = new Course("2eth2", 2, ["Knöpflerseitz"]);
+
+        var rel51 = new Course("5Rel1", 5, ["Knöpflerseitz"]);
+        var rel21 = new Course("2rel1", 2, ["Knöpflerseitz"]);
+
+        var wi51 = new Course("5Wi1", 5, ["Novak"]);
+
+        var e51 = new Course("5E1", 5, ["Weber"]);
+        var e31 = new Course("3e1", 3, ["Benz"]);
+        var e32 = new Course("3e2", 3, ["Kohler"]);
+        MustContainAll(e51, e31, e32);
+
+        var l51 = new Course("5L1", 2, ["Kutscherauer", "Elin", "Johanna", "Marie", "Emma W", "Fenja"]);
+        var l31 = new Course("3l1", 3, ["Kutscherauer", "Miriana", "Elin", "Johanna", "Tabita", "Marie", "Emma W", "Fenja", "Helen", "Jonathan", "Violet"]);
+
+        var bk51 = new Course("5BK1", 5, ["Losing", "Emma S", "Miriana", "Juliane"]);
+        var bk21 = new Course("2bk1", 2, ["Waidosch", "Jonathan", "Lorenz", "Bruno", "Nola", "Emma W", "Lennard", "Eliah", "Mara", "Amelie", "Onyx", "Violet", "Lotta", "Sofiia"]);
+        var bk22 = new Course("2bk2", 2, ["Waidosch", "Jaron", "Annabelle", "Anna", "Josef", "Mathilda", "Muhammed", "Katharina"]);
+        MustContain(22, bk21, bk22);
+
+        var mu51 = new Course("5Mu1", 5, ["Schäfer", "Joshua", "Lea", "Eliah", "Luana"]);
+        var mu21 = new Course("2mu1", 2, ["Schäfer"]);
+        var mu22 = new Course("2mu2", 2, ["Schäfer"]);
+
+        var sp51 = new Course("5Sp1", 3, ["Engel", "Nola", "Richard",  "Onyx", "William"]);
+        var sp21 = new Course("2sp1", 2, ["Weiß"]);
+        var sp22 = new Course("2sp2", 2, ["Egnel", "Pia", "Nola", "Luka", "Miriana", "Linyi", "Annabelle", "Luana", "Emma S", "Marie-M", "Katharina", "Annabel", "Lorenz", "William", "Lisa", "Catelyn", "Felix H", "Hendrik", "Richard", "Onyx"]);
+        var sp23 = new Course("2sp3", 2, ["Schwamm"]);
+        MustContainAll(sp21, sp22, sp23);
+
         return [
             m51, m52, m31,
             d51, d31, d32, d33,
@@ -158,6 +190,14 @@ internal static class TestHelper
             ch51, ch52, ch31,
             b51, b31,
             g51, g21, g22, g23,
+            gk51, gk21, gk22,
+            eth51, eth21, eth22,
+            rel51, rel21,
+            wi51,
+            e51, e31, e32,
+            l51, l31,
+            bk51, bk21, bk22,
+            mu51, mu21, mu22,
         ];
 
         static void MustContainAll(params IEnumerable<Course> courses)
@@ -165,6 +205,12 @@ internal static class TestHelper
             const int PERSONS = 49;
             ArgumentOutOfRangeException.ThrowIfNotEqual(courses.Sum(c => c.People.Count), PERSONS);
             ArgumentOutOfRangeException.ThrowIfNotEqual(courses.Skip(1).Aggregate(courses.First().People.AsEnumerable(), (u, c) => u.UnionBy(c.People, static p => p.ID)).Count(), 0);
+        }
+
+        static void MustContain(int count, params IEnumerable<Course> courses)
+        {
+            ArgumentOutOfRangeException.ThrowIfNotEqual(courses.SelectMany(c => c.People).Distinct().Count(), count);
+            //ArgumentOutOfRangeException.ThrowIfNotEqual(courses.Skip(1).Aggregate(courses.First().People.AsEnumerable(), (u, c) => u.UnionBy(c.People, static p => p.ID)).Count(), 0);
         }
     }
 }
