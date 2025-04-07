@@ -138,7 +138,9 @@ internal static class TestHelper
         var ch51 = new Course("5Ch1", 5, ["Tsalastra"]);
         var ch52 = new Course("5Ch2", 5, ["Richter"]);
         var ch31 = new Course("3ch1", 3, ["Schönborn"]);
-        MustContainAll(ch51, ch52, ch31);
+
+        var b51 = new Course("5B1", 5, ["Akst"]);
+        var b31 = new Course("3b1", 3, ["Akst"]);
 
         return [
             m51, m52, m31,
