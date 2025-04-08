@@ -137,7 +137,7 @@ internal static class TestHelper
         var ch52 = new Course("5Ch2", 5, ["Richter", "Felix G", "Josef", "Muhammed", "Luka", "Linyi", "Annabelle", "Georgy", "Elin", "Jaron", "Mara", "Catelyn", "Felix H", "Tina", "Alexander"]);
         var ch31 = new Course("3ch1", 3, ["Schönborn"]);
 
-        var b51 = new Course("5B1", 5, ["Akst"]);
+        var b51 = new Course("5B1", 5, ["Akst", "Johanna", "Georgy", "Luka", "Catelyn"]);
         var b31 = new Course("3b1", 3, ["Akst"]);
 
         var g51 = new Course("5G1", 3, ["Heese", "Bruno", "Emma W", "Violet"]);
@@ -152,7 +152,7 @@ internal static class TestHelper
         MustContainAll(gk51, gk21, gk22);
 
         var eth51 = new Course("5Eth1", 5, ["Egner", "Pia", "Amelie", "Michael", "Marie-M", "Lorenz", "Lisa", "Helen", "Hendrik", "Jonathan"]);
-        var eth21 = new Course("2eth1", 2, ["Weißer"]);
+        var eth21 = new Course("2eth1", 2, ["Weißer", "Moana", "Elin", "Bruno", "Lennard", "Joshua", "Georgy", "Felix H", "Annabelle", "Nola", "Muhammed", "Luana", "Eliah", "Emma S"]);
         var eth22 = new Course("2eth2", 2, ["Knöpfler-Seitz", "Josef", "Luka", "Linyi", "Juliane", "Serhii", "Mara", "Anna", "Tina", "Sofiia", "Jakob", "Lea"]);
 
         var rel51 = new Course("5Rel1", 5, ["Droesch", "Johanna", "Tabitha"]);
@@ -176,7 +176,7 @@ internal static class TestHelper
 
         var mu51 = new Course("5Mu1", 5, ["Schäfer", "Joshua", "Lea", "Eliah", "Luana"]);
         var mu21 = new Course("2mu1", 2, ["Schäfer", "Luka", "Linyi", "Lilly", "Annabelle", "Georgy", "Serhii", "Marie-M", "William", "Lisa", "Catelyn", "Tina", "Hendrik", "Richard"]);
-        var mu22 = new Course("2mu2", 2, ["Schäfer"]);
+        var mu22 = new Course("2mu2", 2, ["Schäfer", "Felix H", "Alexander", "Clara", "Moana", "Helen", "Michael", "Fenja", "Annabel", "Marie", "Johanna", "Tabitha"]);
 
         var sp51 = new Course("5Sp1", 3, ["Engel", "Nola", "Richard",  "Onyx", "William"]);
         var sp21 = new Course("2sp1", 2, ["Weiß"]);
@@ -185,6 +185,8 @@ internal static class TestHelper
         MustContainAll(sp21, sp22, sp23);
 
         var mva21 = new Course("2mva1", 2, ["Fischer", "Josef", "Muhammed", "Linyi", "Joshua", "Serhii", "Marie", "Fenja", "Felix H", "Tina", "Sofiia", "Matilda", "Alexander"]);
+
+        var inf21 = new Course("2inf1", 2, ["Häcker", "Jonathan", "Jaron", "Lennard", "Felix", "Muhammed", "Emma S"]);
 
         return [
             m51, m52, m31,
