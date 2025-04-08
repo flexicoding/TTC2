@@ -133,7 +133,7 @@ internal static class TestHelper
         var py51 = new Course("5Ph1", 5, ["Brökelmann", "Jonathan", "Mara", "Fenja", "Luana", "Kathie", "Felix G", "Felix H", "Josef", "Alex", "Joshua", "Tina", "Mathilda", "Serhii", "Linyi"]);
         var py31 = new Course("3ph1", 3, ["Wedemayer", "Jaron", "Richard", "Pia", "Helen", "Sofiia"]);
 
-        var ch51 = new Course("5Ch1", 5, ["Tsalastra"]);
+        var ch51 = new Course("5Ch1", 5, ["Tsalastra", "Clara", "Hendrik", "Marie", "Onyx", "Pia", "Richard", "William", "Lennard"]);
         var ch52 = new Course("5Ch2", 5, ["Richter", "Felix G", "Josef", "Muhammed", "Luka", "Linyi", "Annabelle", "Georgy", "Elin", "Jaron", "Mara", "Catelyn", "Felix H", "Tina", "Alexander"]);
         var ch31 = new Course("3ch1", 3, ["Schönborn"]);
 
