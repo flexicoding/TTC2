@@ -155,8 +155,9 @@ internal static class TestHelper
         var eth21 = new Course("2eth1", 2, ["Weißer"]);
         var eth22 = new Course("2eth2", 2, ["Knöpfler-Seitz", "Josef", "Luka", "Linyi", "Juliane", "Serhii", "Mara", "Anna", "Tina", "Sofiia", "Jakob", "Lea"]);
 
-        var rel51 = new Course("5Rel1", 5, ["Knöpfler-Seitz", "Johanna", "Tabitha"]);
-        var rel21 = new Course("2rel1", 2, ["Knöpfler-Seitz"]);
+        var rel51 = new Course("5Rel1", 5, ["Droesch", "Johanna", "Tabitha"]);
+        var rel21 = new Course("2rel1", 2, ["Droesch", "Johanna", "Tabitha", "Emma", "Catelyn", "Alexander", "Katharina", "Mathilda", "Mariana"]);
+        var rel22 = new Course("2rel2", 2, ["Key-Häring", "Lilly", "Jaron", "Lotta", "Annabel", "Marie", "William", "Richard", "Onyx", "Clara"]);
 
         var wi51 = new Course("5Wi1", 5, ["Novak", "Elin", "Serhii", "Lennard", "Sofiia"]);
 
