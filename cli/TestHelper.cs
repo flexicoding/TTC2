@@ -204,6 +204,7 @@ internal static class TestHelper
             bk51, bk21, bk22,
             mu51, mu21, mu22,
             sp51, sp21, sp22, sp23,
+            mva21, inf21
         ];
 
         static void MustContainAll(params IEnumerable<Course> courses)
