@@ -146,7 +146,7 @@ internal static class TestHelper
         var g23 = new Course("2g3", 2, ["Sarbacher"]);
         // MustContainAll(g51, g21, g22, g23);
 
-        var gk51 = new Course("5GK1", 5, [""]);
+        var gk51 = new Course("5GK1", 5, ["Weinbrenner", "Lilly", "Lotta"]);
         var gk21 = new Course("2gk1", 2, ["Akst", "Felix G", "Amelie", "Josef", "Muhammed", "Luka", "Linyi", "Annabelle", "Georgy", "Joshua", "Eliah", "Emma S", "Lorenz", "Mara", "William", "Catelyn", "Felix H", "Tina", "Hendrik", "Richard", "Onyx", "Alexander"]);
         var gk22 = new Course("2gk2", 2, ["Akst", "Nola", "Miriana", "Michael", "Luana", "Juliane", "Johanna", "Tabita", "Marie-M", "Katharina", "Moana", "Marie", "Emma W", "Lisa", "Fenja", "Helen", "Bruno", "Jonathan", "Matilda", "Violet", "Lea", "Clara"]);
         MustContainAll(gk51, gk21, gk22);
