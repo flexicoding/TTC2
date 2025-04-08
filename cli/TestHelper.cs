@@ -160,7 +160,7 @@ internal static class TestHelper
 
         var wi51 = new Course("5Wi1", 5, ["Novak", "Elin", "Serhii", "Lennard", "Sofiia"]);
 
-        var e51 = new Course("5E1", 5, ["Weber"]);
+        var e51 = new Course("5E1", 5, ["Weber", "Amelie", "Anna", "Annabel", "Clara", "Eliah", "Emma S", "Helen", "Violet", "Jaron", "Juliane", "Katharina", "Michael", "Moana", "Lotta", "Sofiia" "Tabitha"]);
         var e31 = new Course("3e1", 3, ["Benz", "Pia", "Felix G", "Muhammed", "Linyi", "Elin", "Luana", "Serhii", "Marie", "Lorenz", "Mara", "Bruno", "Felix H", "Tina", "Hendrik", "Richard", "Alexander"]);
         var e32 = new Course("3e2", 3, ["Kohler", "Nola", "Luka", "Miriana", "Annabelle", "Georgy", "Joshua", "Johanna", "Marie-M", "Emma", "William", "Lisa", "Lennard", "Catelyn", "Onyx", "Jonathan"]);
         MustContainAll(e51, e31, e32);
