@@ -144,7 +144,7 @@ internal static class TestHelper
         var g51 = Course("5G1", 3, ["Heese", "Bruno", "Emma W", "Violet"]);
         var g21 = Course("2g1", 2, ["Heese", "Bruno", "Emma W", "Violet", "Jonathan", "Lorenz", "Hendrik", "Amelie", "Michael", "Pia", "Marie-M", "Lisa", "Lennard"]);
         var g22 = Course("2g2", 2, ["Egner", "Felix G", "Josef", "Muhammed", "Luka", "Georgy", "Elin", "Serhii", "Jaron", "Lotta", "Marie", "Mara", "William", "Helen", "Anna", "Catelyn", "Tina", "Sofiia", "Richard", "Onyx", "Alexander", "Clara"]);
-        var g23 = Course("2g3", 2, ["Sarbacher"]);
+        var g23 = Course("2g3", 2, ["Sarbacher", "Annabel", "Annabelle", "Eliah", "Emma S", "Felix H", "Fenja", "Johanna", "Joshua", "Juliane", "Katharina", "Lea", "Lilly", "Linyi", "Luana", "Marie-M", "Matilda", "Miriana", "Moana", "Nola", "Tabitha"]);
         MustContain(PERSONS + 3, g21, g22, g23);
 
         var gk51 = Course("5GK1", 3, ["Weinbrenner", "Lilly", "Lotta"]);
