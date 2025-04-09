@@ -153,7 +153,7 @@ internal static class TestHelper
         var gk24 = new Course("2gk4", 2, ["Weinbrenner", "Lilly", "Lotta", "Annabel", "Anna", "Jaron"]);
 
         var eth51 = new Course("5Eth1", 5, ["Egner", "Pia", "Amelie", "Michael", "Marie-M", "Lorenz", "Lisa", "Helen", "Hendrik", "Jonathan"]);
-        var eth21 = new Course("2eth1", 2, ["Weißer", "Moana", "Elin", "Bruno", "Lennard", "Joshua", "Georgy", "Felix H", "Annabelle", "Nola", "Muhammed", "Luana", "Eliah", "Emma S"]);
+        var eth21 = new Course("2eth1", 2, ["Weißer", "Moana", "Elin", "Bruno", "Lennard", "Joshua", "Georgy", "Felix H", "Annabelle", "Nola", "Muhammed", "Luana", "Eliah", "Emma S", "Felix G"]);
         var eth22 = new Course("2eth2", 2, ["Knöpfler-Seitz", "Josef", "Luka", "Linyi", "Juliane", "Serhii", "Mara", "Anna", "Tina", "Sofiia", "Violet", "Lea"]);
 
         var rel51 = new Course("5Rel1", 5, ["Droesch", "Johanna", "Tabitha"]);
