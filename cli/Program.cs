@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.IO;
 using System.Text.Json;
 using TTC.Cli;
 using TTC.Core.Serialization;
@@ -70,7 +71,15 @@ debugCommand.SetHandler(static (random, outputPath, jsonHelper) =>
         return;
     }
 
-    var kurse = TestHelper.GenerateRealisticTestSet(random).ToArray();
+    var kurse = TestHelper.GetRealTestSet().ToArray();
+    var info = kurse.SelectMany(c => c.People).CountBy(p => p.ID).OrderBy(p => p.Value);
+    foreach (var (person, count) in info)
+    {
+        Console.WriteLine($"{person}: {count}");
+    }
+
+    if (Directory.Exists(outputPath)) outputPath = Path.Combine(outputPath, "courses.json");
+
     jsonHelper.WriteCollection(kurse, new(outputPath));
 }, seedOption, outputOption, jsonHelperBinder);
 root.AddCommand(debugCommand);
