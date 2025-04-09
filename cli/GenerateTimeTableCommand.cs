@@ -23,7 +23,7 @@ public static class GenerateTimeTableCommand
 
         var count = 1;
 
-        while (!wave.Collapse(verbose))
+        while (wave.Collapse(verbose) > 0)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             if (!verbose)

@@ -7,11 +7,11 @@ public sealed class JsonHelper
 {
     public JsonSerializerOptions Options { get; set; } = JsonSerializerOptions.Default;
 
-    public void WriteCollection<T>(IEnumerable<T> data, FileInfo output)
+    public void WriteCollection<T>(IEnumerable<T> data, FileInfo output, JsonSerializerOptions? options = null)
     {
         using var stream = output.OpenWrite();
         stream.SetLength(0);
-        JsonSerializer.Serialize(stream, data, Options);
+        JsonSerializer.Serialize(stream, data, options ?? Options);
     }
 
     public void WriteTimeTable(TimeTableWave wave, FileInfo output)
@@ -32,13 +32,13 @@ public sealed class JsonHelper
         var jsonOptions = new JsonSerializerOptions(Options);
         jsonOptions.Converters.Add(new ReducedCoursesJsonConverter(wave.Courses));
 
-        WriteCollection(outputData, output);
+        WriteCollection(outputData, output, jsonOptions);
     }
 
-    public IEnumerable<T> ReadCollection<T>(FileInfo input)
+    public IEnumerable<T> ReadCollection<T>(FileInfo input, JsonSerializerOptions? options = null)
     {
         using var stream = input.OpenRead();
-        return JsonSerializer.Deserialize<IEnumerable<T>>(stream, Options) ?? throw new JsonException();
+        return JsonSerializer.Deserialize<IEnumerable<T>>(stream, options ?? Options) ?? throw new JsonException();
     }
 
     public void FillTimeTable(FileInfo input, TimeTableWave wave)
@@ -46,7 +46,7 @@ public sealed class JsonHelper
         var jsonOptions = new JsonSerializerOptions(Options);
         jsonOptions.Converters.Add(new ReducedCoursesJsonConverter(wave.Courses));
 
-        var data = ReadCollection<TimeTableEntry>(input);
+        var data = ReadCollection<TimeTableEntry>(input, jsonOptions);
 
         foreach (var entry in data)
         {

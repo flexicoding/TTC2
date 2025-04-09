@@ -37,7 +37,7 @@ public sealed class TimeTableWave
         _kurseOrder = [.. Enumerable.Range(0, Courses.Length)];
     }
 
-    public bool Collapse(bool verbose)
+    public int Collapse(bool verbose)
     {
         do
         {
@@ -171,8 +171,9 @@ public sealed class TimeTableWave
         Wave.Fill(1);
     }
 
-    public bool Validate(bool verbose)
+    public int Validate(bool verbose)
     {
+        var issues = 0;
         // verify each course has the exact amount of lessions
         foreach (var course in Courses)
         {
@@ -180,7 +181,7 @@ public sealed class TimeTableWave
             if (count != course.LessionsPerTurnus)
             {
                 WriteLine($"{course.Slug} has {count}/{course.LessionsPerTurnus} lessions per turnus");
-                return false;
+                issues++;
             }
         }
 
@@ -194,13 +195,13 @@ public sealed class TimeTableWave
                     if (FinalPlan[slot, day].Count(k => k.People.Contains(person)) > 1)
                     {
                         WriteLine($"{person.ID} has more than one lession on {day} {slot}.");
-                        return false;
+                        issues++;
                     }
                 }
             }
         }
 
-        return true;
+        return issues;
 
         void WriteLine(string message)
         {
