@@ -177,6 +177,8 @@ internal static class TestHelper
 
         var sp31 = Course("3sp1", 3, ["Matilda", "Anna", "Juliane", "Clara", "Bruno"]);
 
+        var gr31 = Course("3gr1", 3, ["Ulmer", "Hendrik", "Emma W"]);
+
         var bk51 = Course("5BK1", 5, ["Losing", "Emma S", "Miriana", "Juliane"]);
         var bk21 = Course("2bk1", 2, ["Waidosch", "Jonathan", "Lorenz", "Bruno", "Nola", "Emma W", "Lennard", "Eliah", "Amelie", "Onyx", "Violet", "Lotta", "Sofiia"]);
         var bk22 = Course("2bk2", 2, ["Waidosch", "Jaron", "Annabelle", "Anna", "Josef", "Matilda", "Muhammed", "Katharina", "Mara"]);
@@ -196,7 +198,6 @@ internal static class TestHelper
 
         var inf21 = Course("2inf1", 2, ["Häcker", "Jonathan", "Jaron", "Lennard", "Felix H", "Muhammed", "Emma S"]);
 
-
         ImmutableArray<Course> courses = [
             m51, m52, m31,
             d51, d31, d32, d33,
@@ -212,6 +213,7 @@ internal static class TestHelper
             l51, l31,
             f51, f31,
             sp31,
+            gr31,
             bk51, bk21, bk22,
             mu51, mu21, mu22,
             s51, s21, s22, s23,
