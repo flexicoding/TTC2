@@ -15,8 +15,9 @@ public sealed class TimeTableWave
     public Random Random { get; init; } = Random.Shared;
     private readonly int[] _kurseOrder;
 
-    public ref float this[int hour, Day day, int lession] => ref Wave[hour, (int)day, lession];
-    private ref float this[int hour, int day, int lession] => ref Wave[hour, day, lession];
+    public ref float this[int hour, Day day, int courseIndex] => ref Wave[hour, (int)day, courseIndex];
+    public ref float this[int hour, Day day, Course course] => ref Wave[hour, (int)day, Courses.IndexOf(course)];
+    private ref float this[int hour, int day, int courseIndex] => ref Wave[hour, day, courseIndex];
 
     public TimeTableWave(IEnumerable<Course> courses, IEnumerable<Rule> rules)
         : this([.. courses], [.. rules]) { }
@@ -27,7 +28,7 @@ public sealed class TimeTableWave
         Courses = Guard.ThrowIfNullOrEmpty(courses);
         if (Courses.Select(k => k.Slug).SelectDuplicates().Any())
         {
-            throw new ArgumentException("Kurse contains duplicates", nameof(courses));
+            throw new ArgumentException("Courses contains duplicates", nameof(courses));
         }
         People = [.. courses.SelectMany(k => k.People).Distinct()];
         FinalPlan = new(SlotsPerDay, Days.Length);
