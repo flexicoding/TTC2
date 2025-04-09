@@ -194,7 +194,7 @@ public sealed class TimeTableWave
                 {
                     if (FinalPlan[slot, day].Count(k => k.People.Contains(person)) > 1)
                     {
-                        WriteLine($"{person.ID} has more than one lession on {day} {slot}.");
+                        WriteLine($"{person.ID} has more than one lesson on {day} {slot}.");
                         issues++;
                     }
                 }
