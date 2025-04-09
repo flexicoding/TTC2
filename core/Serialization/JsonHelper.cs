@@ -30,7 +30,7 @@ public sealed class JsonHelper
         }
 
         var jsonOptions = new JsonSerializerOptions(Options);
-        jsonOptions.Converters.Add(new ReducedKursJsonConverter(wave.Courses));
+        jsonOptions.Converters.Add(new ReducedCoursesJsonConverter(wave.Courses));
 
         WriteCollection(outputData, output);
     }
@@ -44,7 +44,7 @@ public sealed class JsonHelper
     public void FillTimeTable(FileInfo input, TimeTableWave wave)
     {
         var jsonOptions = new JsonSerializerOptions(Options);
-        jsonOptions.Converters.Add(new ReducedKursJsonConverter(wave.Courses));
+        jsonOptions.Converters.Add(new ReducedCoursesJsonConverter(wave.Courses));
 
         var data = ReadCollection<TimeTableEntry>(input);
 

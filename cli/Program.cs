@@ -47,14 +47,25 @@ generateCoursesCommand.AddOption(seedOption);
 generateCoursesCommand.SetHandler(GenerateCoursesCommand.Run, inputArgument, seedOption, outputOption, jsonHelperBinder);
 root.AddCommand(generateCoursesCommand);
 
-var generateTimeTableCommand = new Command("generate", description: "Given a json list of all kurse, generate a json time table");
+var generateTimeTableCommand = new Command("generate", description: "Given a json list of all courses, generate a json time table");
 generateTimeTableCommand.AddArgument(inputArgument);
 generateTimeTableCommand.AddOption(outputOption);
 generateTimeTableCommand.AddOption(seedOption);
 generateTimeTableCommand.AddOption(rulesOption);
 generateTimeTableCommand.AddOption(verboseOption);
-generateTimeTableCommand.SetHandler(GenerateTimeTableCommand.Run,inputArgument, seedOption, outputOption, rulesOption, verboseOption, jsonHelperBinder);
+generateTimeTableCommand.SetHandler(GenerateTimeTableCommand.Run, inputArgument, seedOption, outputOption, rulesOption, verboseOption, jsonHelperBinder);
 root.AddCommand(generateTimeTableCommand);
+
+var coursesOption = new Option<string>("--courses", description: "");
+coursesOption.AddAlias("-c");
+var tableOption = new Option<string>("--timetable", description: "");
+tableOption.AddAlias("-t");
+
+var validateTimeTableCommand = new Command("validate", description: "Validates an existing time table");
+validateTimeTableCommand.AddOption(coursesOption);
+validateTimeTableCommand.AddOption(tableOption);
+validateTimeTableCommand.SetHandler(ValidateTimeTableCommand.Run, coursesOption, tableOption, jsonHelperBinder);
+root.AddCommand(validateTimeTableCommand);
 
 var exportDefaultRulesCommand = new Command("export-default-rules");
 exportDefaultRulesCommand.AddOption(outputOption);

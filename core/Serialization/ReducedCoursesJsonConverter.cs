@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace TTC.Core.Serialization;
 
-public sealed class ReducedKursJsonConverter(IEnumerable<Course> kurse) : JsonConverter<Course>
+public sealed class ReducedCoursesJsonConverter(IEnumerable<Course> kurse) : JsonConverter<Course>
 {
     public FrozenDictionary<string, Course> Courses { get; } = kurse.ToFrozenDictionary(k => k.Slug);
 
