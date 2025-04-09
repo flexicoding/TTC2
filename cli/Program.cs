@@ -95,4 +95,4 @@ debugCommand.SetHandler(static (random, outputPath, jsonHelper) =>
 }, seedOption, outputOption, jsonHelperBinder);
 root.AddCommand(debugCommand);
 
-root.Invoke([.. args]);
+root.Invoke([.. args, "validate", "-c", @"C:\Users\Nation\Documents\Coding\TestChamber\TTC\courses.json", "-t", @"C:\Users\Nation\Documents\Coding\TestChamber\TTC\courses_timetable.json"]);
