@@ -172,6 +172,9 @@ internal static class TestHelper
         var l51 = Course("5L1", 2, ["Kutscherauer", "Elin", "Johanna", "Marie", "Emma W", "Fenja"]);
         var l31 = Course("3l1", 3, ["Kutscherauer", "Miriana", "Elin", "Johanna", "Tabitha", "Marie", "Emma W", "Fenja", "Helen", "Jonathan", "Violet"]);
 
+        var f51 = Course("5f1", 2, ["Schubart", "Lea", "Marie-M", "Moana"]);
+        var f31 = Course("3f1", 3, ["Schubart", "Lea", "Marie-M", "Moana", "Nola", "Lilly", "Annabel", "Michael"]);
+
         var bk51 = Course("5BK1", 5, ["Losing", "Emma S", "Miriana", "Juliane"]);
         var bk21 = Course("2bk1", 2, ["Waidosch", "Jonathan", "Lorenz", "Bruno", "Nola", "Emma W", "Lennard", "Eliah", "Amelie", "Onyx", "Violet", "Lotta", "Sofiia"]);
         var bk22 = Course("2bk2", 2, ["Waidosch", "Jaron", "Annabelle", "Anna", "Josef", "Matilda", "Muhammed", "Katharina", "Mara"]);
@@ -191,9 +194,6 @@ internal static class TestHelper
 
         var inf21 = Course("2inf1", 2, ["Häcker", "Jonathan", "Jaron", "Lennard", "Felix H", "Muhammed", "Emma S"]);
 
-        var f51 = Course("5f1", 2, ["Schubart", "Lea", "Marie-M", "Moana"]);
-        var f31 = Course("3f1", 3, ["Schubart", "Lea", "Marie-M", "Moana", "Nola", "Lilly", "Annabel", "Michael"]);
-
         ImmutableArray<Course> courses = [
             m51, m52, m31,
             d51, d31, d32, d33,
@@ -207,6 +207,7 @@ internal static class TestHelper
             wi51,
             e51, e31, e32,
             l51, l31,
+            f51, f31,
             bk51, bk21, bk22,
             mu51, mu21, mu22,
             sp51, sp21, sp22, sp23,
