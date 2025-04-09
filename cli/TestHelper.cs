@@ -165,9 +165,9 @@ internal static class TestHelper
         MustContain(PERSONS + 2, gk21, gk22, gk24, wi51);
 
         var e51 = new Course("5E1", 5, ["Weber", "Amelie", "Anna", "Annabel", "Clara", "Eliah", "Emma S", "Helen", "Violet", "Jaron", "Juliane", "Katharina", "Michael", "Moana", "Lotta", "Sofiia", "Tabitha"]);
-        var e31 = new Course("3e1", 3, ["Benz", "Pia", "Felix G", "Muhammed", "Linyi", "Elin", "Luana", "Serhii", "Marie", "Lorenz", "Mara", "Bruno", "Felix H", "Tina", "Hendrik", "Richard", "Alexander", "Josef", "Fenja", "Lilly"]);
+        var e31 = new Course("3e1", 3, ["Benz", "Pia", "Felix G", "Muhammed", "Linyi", "Elin", "Luana", "Serhii", "Marie", "Lorenz", "Mara", "Bruno", "Felix H", "Tina", "Hendrik", "Richard", "Alexander", "Josef"]);
         var e32 = new Course("3e2", 3, ["Kohler", "Nola", "Luka", "Miriana", "Annabelle", "Georgy", "Joshua", "Johanna", "Marie-M", "Emma W", "William", "Lisa", "Lennard", "Catelyn", "Onyx", "Jonathan", "Matilda", "Lea"]);
-        MustContain(PERSONS + 3, e51, e31, e32);
+        MustContain(PERSONS + 3 - 2, e51, e31, e32); // - Lilly - Fenja
 
         var l51 = new Course("5L1", 2, ["Kutscherauer", "Elin", "Johanna", "Marie", "Emma W", "Fenja"]);
         var l31 = new Course("3l1", 3, ["Kutscherauer", "Miriana", "Elin", "Johanna", "Tabitha", "Marie", "Emma W", "Fenja", "Helen", "Jonathan", "Violet"]);
@@ -191,7 +191,7 @@ internal static class TestHelper
 
         var inf21 = new Course("2inf1", 2, ["Häcker", "Jonathan", "Jaron", "Lennard", "Felix H", "Muhammed", "Emma S"]);
 
-        Course[] courses = [
+        ImmutableArray<Course> courses = [
             m51, m52, m31,
             d51, d31, d32, d33,
             py51, py31,
