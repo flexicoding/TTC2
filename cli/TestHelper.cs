@@ -175,6 +175,8 @@ internal static class TestHelper
         var f51 = Course("5f1", 2, ["Schubart", "Lea", "Marie-M", "Moana"]);
         var f31 = Course("3f1", 3, ["Schubart", "Lea", "Marie-M", "Moana", "Nola", "Lilly", "Annabel", "Michael"]);
 
+        var sp31 = Course("3sp1", 3, ["Matilda", "Anna", "Juliane", "Clara", "Bruno"]);
+
         var bk51 = Course("5BK1", 5, ["Losing", "Emma S", "Miriana", "Juliane"]);
         var bk21 = Course("2bk1", 2, ["Waidosch", "Jonathan", "Lorenz", "Bruno", "Nola", "Emma W", "Lennard", "Eliah", "Amelie", "Onyx", "Violet", "Lotta", "Sofiia"]);
         var bk22 = Course("2bk2", 2, ["Waidosch", "Jaron", "Annabelle", "Anna", "Josef", "Matilda", "Muhammed", "Katharina", "Mara"]);
@@ -184,17 +186,16 @@ internal static class TestHelper
         var mu21 = Course("2mu1", 2, ["Schäfer", "Luka", "Linyi", "Lilly", "Annabelle", "Georgy", "Serhii", "Marie-M", "William", "Lisa", "Catelyn", "Tina", "Hendrik", "Richard"]);
         var mu22 = Course("2mu2", 2, ["Schäfer", "Felix H", "Alexander", "Clara", "Moana", "Helen", "Michael", "Fenja", "Annabel", "Marie", "Johanna", "Tabitha"]);
 
-        var sp51 = Course("5S1", 3, ["Engel", "Nola", "Richard", "Onyx", "William"]);
-        var sp21 = Course("2s1", 2, ["Weiß", "Amelie", "Josef", "Muhammed", "Georgy", "Joshua", "Michael", "Jaron", "Marie", "Emma W", "Fenja", "Helen", "Anna", "Lennard", "Matilda", "Violet"]);
-        var sp22 = Course("2s2", 2, ["Engel", "Pia", "Nola", "Luka", "Miriana", "Linyi", "Annabelle", "Luana", "Emma S", "Marie-M", "Katharina", "Annabel", "Lorenz", "William", "Lisa", "Catelyn", "Felix H", "Hendrik", "Richard", "Onyx", "Jonathan"]);
-        var sp23 = Course("2s3", 2, ["Schwamm", "Felix G", "Lilly", "Elin", "Johanna", "Clara", "Serhii", "Tabitha", "Moana", "Mara", "Bruno", "Tina", "Sofiia", "Lea"]);
-        MustContain(PERSONS + 3, sp21, sp22, sp23);
+        var s51 = Course("5S1", 3, ["Engel", "Nola", "Richard", "Onyx", "William"]);
+        var s21 = Course("2s1", 2, ["Weiß", "Amelie", "Josef", "Muhammed", "Georgy", "Joshua", "Michael", "Jaron", "Marie", "Emma W", "Fenja", "Helen", "Anna", "Lennard", "Matilda", "Violet"]);
+        var s22 = Course("2s2", 2, ["Engel", "Pia", "Nola", "Luka", "Miriana", "Linyi", "Annabelle", "Luana", "Emma S", "Marie-M", "Katharina", "Annabel", "Lorenz", "William", "Lisa", "Catelyn", "Felix H", "Hendrik", "Richard", "Onyx", "Jonathan"]);
+        var s23 = Course("2s3", 2, ["Schwamm", "Felix G", "Lilly", "Elin", "Johanna", "Clara", "Serhii", "Tabitha", "Moana", "Mara", "Bruno", "Tina", "Sofiia", "Lea"]);
+        MustContain(PERSONS + 3, s21, s22, s23);
 
         var mva21 = Course("2mva1", 2, ["Fischer", "Josef", "Muhammed", "Linyi", "Joshua", "Serhii", "Marie", "Fenja", "Felix H", "Tina", "Sofiia", "Matilda", "Alexander"]);
 
         var inf21 = Course("2inf1", 2, ["Häcker", "Jonathan", "Jaron", "Lennard", "Felix H", "Muhammed", "Emma S"]);
 
-        var sp31 = Course("3sp1", 3, ["Matilda", "Anna", "Juliane", "Clara", "Bruno"]);
 
         ImmutableArray<Course> courses = [
             m51, m52, m31,
@@ -210,9 +211,10 @@ internal static class TestHelper
             e51, e31, e32,
             l51, l31,
             f51, f31,
+            sp31,
             bk51, bk21, bk22,
             mu51, mu21, mu22,
-            sp51, sp21, sp22, sp23,
+            s51, s21, s22, s23,
             mva21,
             inf21,
         ];
@@ -225,7 +227,7 @@ internal static class TestHelper
         MustContainAll(gk21, gk22, gk24, wi51);
         MustContainAll(eth51, eth21, eth22, rel21, rel22);
         MustContainAll(e51, e31, e32);
-        MustContainAll(sp21, sp22, sp23);
+        MustContainAll(s21, s22, s23);
 
         return courses;
 
