@@ -190,7 +190,7 @@ internal static class TestHelper
 
         var s51 = Course("5S1", 3, ["Engel", "Nola", "Richard", "Onyx", "William"]);
         var s21 = Course("2s1", 2, ["Weiß", "Amelie", "Josef", "Muhammed", "Georgy", "Joshua", "Michael", "Jaron", "Marie", "Emma W", "Fenja", "Helen", "Anna", "Lennard", "Matilda", "Violet"]);
-        var s22 = Course("2s2", 2, ["Engel", "Pia", "Nola", "Luka", "Miriana", "Linyi", "Annabelle", "Luana", "Emma S", "Marie-M", "Katharina", "Annabel", "Lorenz", "William", "Lisa", "Catelyn", "Felix H", "Hendrik", "Richard", "Onyx", "Jonathan"]);
+        var s22 = Course("2s2", 2, ["Engel", "Pia", "Nola", "Luka", "Miriana", "Linyi", "Annabelle", "Luana", "Emma S", "Marie-M", "Katharina", "Annabel", "Lorenz", "William", "Lisa", "Catelyn", "Felix H", "Hendrik", "Richard", "Onyx", "Jonathan", "Alexander"]);
         var s23 = Course("2s3", 2, ["Schwamm", "Felix G", "Lilly", "Elin", "Johanna", "Clara", "Serhii", "Tabitha", "Moana", "Mara", "Bruno", "Tina", "Sofiia", "Lea"]);
         MustContain(PERSONS + 3, s21, s22, s23);
 
