@@ -194,6 +194,8 @@ internal static class TestHelper
 
         var inf21 = Course("2inf1", 2, ["Häcker", "Jonathan", "Jaron", "Lennard", "Felix H", "Muhammed", "Emma S"]);
 
+        var sp31 = Course("3sp1", 3, ["Matilda", "Anna", "Juliane", "Clara", "Bruno"]);
+
         ImmutableArray<Course> courses = [
             m51, m52, m31,
             d51, d31, d32, d33,
