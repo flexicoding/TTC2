@@ -34,7 +34,7 @@ var rulesOption = new Option<string>("--rules", description: "The directory path
 rulesOption.AddAlias("-r");
 
 var verboseOption = new Option<bool>("--verbose", description: "prints the issues with each attempt");
-rulesOption.AddAlias("-v");
+verboseOption.AddAlias("-v");
 
 var inputArgument = new Argument<string>("input");
 

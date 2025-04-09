@@ -179,7 +179,7 @@ public sealed class TimeTableWave
             var count = CountCourseLessions(course);
             if (count != course.LessionsPerTurnus)
             {
-                WriteLine($"{course.Slug} has {count} lessions per turnus instead of {course.LessionsPerTurnus}");
+                WriteLine($"{course.Slug} has {count}/{course.LessionsPerTurnus} lessions per turnus");
                 return false;
             }
         }
