@@ -15,7 +15,7 @@ public sealed class ReduceLessionsPerDay(int MaxLessionsPerDayPerPerson, float R
 
                 var factor = lessionCount >= MaxLessionsPerDayPerPerson ? 0 : 1 - ReductionPerLessionPerPerson * lessionCount;
 
-                foreach (var course in ..wave.Courses.Length)
+                foreach (var course in wave.Courses.Where(c => c.People.Contains(person)))
                 {
                     foreach (var hour in ..wave.SlotsPerDay)
                     {
