@@ -56,9 +56,9 @@ generateTimeTableCommand.AddOption(verboseOption);
 generateTimeTableCommand.SetHandler(GenerateTimeTableCommand.Run, inputArgument, seedOption, outputOption, rulesOption, verboseOption, jsonHelperBinder);
 root.AddCommand(generateTimeTableCommand);
 
-var coursesOption = new Option<string>("--courses", description: "");
+var coursesOption = new Option<string>("--courses", description: "Path to the courses referenced in the time table");
 coursesOption.AddAlias("-c");
-var tableOption = new Option<string>("--timetable", description: "");
+var tableOption = new Option<string>("--timetable", description: "Path to the timetable to verify");
 tableOption.AddAlias("-t");
 
 var validateTimeTableCommand = new Command("validate", description: "Validates an existing time table");
