@@ -16,7 +16,7 @@ public sealed class JsonHelper
 
     public void WriteTimeTable(TimeTableWave wave, FileInfo output)
     {
-        var outputData = new List<TimeTableEntry>(wave.Days.Length * wave.SlotsPerDay);
+        var outputData = new List<TimeTableEntry>(wave.Days.Count * wave.SlotsPerDay);
 
         foreach (var day in wave.Days)
         {

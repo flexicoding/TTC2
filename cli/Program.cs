@@ -1,6 +1,7 @@
 ﻿using System.CommandLine;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using TTC.Cli;
 using TTC.Core.Serialization;
 
@@ -9,6 +10,7 @@ var jsonHelper = new JsonHelper
     Options = new(JsonSerializerOptions.Default)
     {
         WriteIndented = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
     }
 };
 
@@ -20,6 +22,9 @@ var ruleTypes = AppDomain.CurrentDomain.GetAssemblies()
 jsonHelper.Options.Converters.Add(new RuleJsonConverter(ruleTypes));
 jsonHelper.Options.Converters.Add(new PersonJsonConverter());
 jsonHelper.Options.Converters.Add(new FrozenSetJsonConverter<Person>());
+jsonHelper.Options.Converters.Add(new FrozenSetJsonConverter<string>());
+jsonHelper.Options.Converters.Add(new FrozenSetJsonConverter<int>());
+jsonHelper.Options.Converters.Add(new FrozenSetJsonConverter<Day>());
 jsonHelper.Options.Converters.Add(new EnumJsonConverter<Day>());
 
 var jsonHelperBinder = new JsonHelperBinder(jsonHelper);
@@ -40,7 +45,7 @@ var inputArgument = new Argument<string>("input");
 
 var root = new RootCommand("Time Table Creator");
 
-var generateCoursesCommand = new Command("generate-kurse", description: "Given a json list of all subjects, generate a json list of randomly assigned kurse");
+var generateCoursesCommand = new Command("generate-kurse", description: "Given a json list of all subjects, generate a json list of randomly assigned courses");
 generateCoursesCommand.AddArgument(inputArgument);
 generateCoursesCommand.AddOption(outputOption);
 generateCoursesCommand.AddOption(seedOption);

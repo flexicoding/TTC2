@@ -13,11 +13,11 @@ public static class ExportDefaultRulesCommand
         output.CreateIfNotExists();
 
         IEnumerable<Rule> rules = [
-            new ModifyTimeSlots([0.6f, 1, 1, 1, 1, 0.6f, 0.1f, 0.05f]) { Name = "weight_time_slots" },
-            new AvoidSameCourseTwiceADay(0.1f) { Name = "avoid_kurs_more_than_once_per_day" },
-            new ReduceLessionsPerDay(5, 0.01f) { Name = "reduce_lessions_per_day" },
-            new NoCoursesOnDays([Day.ASonntag, Day.BFreitag, Day.BSamstag, Day.BSonntag]) { Name = "no_lessions_on_days" },
-            new RequireOneLessionPerPersonPerSlot() { Name = "require_one_lession_per_person_per_slot" },
+            new ModifyTimeSlots([0.5f, 1, 1, 1, 1, 0.6f, 0.01f, 0f]) { Name = "weight_time_slots" },
+            new AvoidSameCourseTwiceADay(0.1f) { Name = "prefer_course_once_per_day" },
+            new ReduceLessionsPerDay(5, 0.01f) { Name = "reduce_lessons_per_day" },
+            new MatchingSlotRule { Days = [Day.ASonntag, Day.BFreitag, Day.BSamstag, Day.BSonntag], Modifier = 0, Name = "no_lessons_on_days" },
+            new RequireOneLessionPerPersonPerSlot() { Name = "single_lesson_per_person_per_slot" },
         ];
 
         foreach (var rule in rules)
@@ -25,5 +25,7 @@ public static class ExportDefaultRulesCommand
             using var stream = output.File($"{rule.Name}.json").OpenWrite();
             JsonSerializer.Serialize(stream, rule, jsonHelper.Options);
         }
+
+        Console.WriteLine($"Exported rules to {output.FullName}");
     }
 }

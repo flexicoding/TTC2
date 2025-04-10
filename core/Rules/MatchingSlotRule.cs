@@ -9,16 +9,16 @@ public sealed class MatchingSlotRule : Rule
 
     public override void Apply(TimeTableWave wave)
     {
-        foreach (var course in wave.Courses)
+        var courses = Courses.Count is 0 ? wave.Courses : wave.Courses.Where(c => Courses.Contains(c.Slug));
+        var days = Days.Count is 0 ? wave.Days : Days;
+        var slots = Slots.Count is 0 ? Enumerable.Range(0, wave.SlotsPerDay) : Slots;
+        foreach (var course in courses)
         {
-            foreach (var day in wave.Days)
+            foreach (var day in days)
             {
-                foreach (var slot in ..wave.SlotsPerDay)
+                foreach (var slot in slots)
                 {
-                    if (Matches(course, day, slot))
-                    {
-                        wave[slot, day, course] *= Modifier;
-                    }
+                    wave[slot, day, course] *= Modifier;
                 }
             }
         }

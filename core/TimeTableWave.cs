@@ -10,7 +10,7 @@ public sealed class TimeTableWave
     public ImmutableArray<Person> People { get; }
     public Tensor Wave { get; }
     public TimeTable FinalPlan { get; }
-    public ImmutableArray<Day> Days { get; }
+    public FrozenSet<Day> Days { get; }
     public int SlotsPerDay { get; } = 8;
     public Random Random { get; init; } = Random.Shared;
     private readonly int[] _kurseOrder;
@@ -31,8 +31,8 @@ public sealed class TimeTableWave
             throw new ArgumentException("Courses contains duplicates", nameof(courses));
         }
         People = [.. courses.SelectMany(k => k.People).Distinct()];
-        FinalPlan = new(SlotsPerDay, Days.Length);
-        Wave = Tensor.Create(SlotsPerDay, Days.Length, courses.Length);
+        FinalPlan = new(SlotsPerDay, Days.Count);
+        Wave = Tensor.Create(SlotsPerDay, Days.Count, courses.Length);
         Wave.Fill(1);
         Rules = rules;
         _kurseOrder = [.. Enumerable.Range(0, Courses.Length)];
@@ -89,11 +89,11 @@ public sealed class TimeTableWave
 
         if (count == lessionsPerTurnus)
         {
-            foreach (var dayIndex in ..Days.Length)
+            foreach (var day in Days)
             {
                 foreach (var hourIndex in ..SlotsPerDay)
                 {
-                    this[hourIndex, dayIndex, kursIndex] = 0;
+                    this[hourIndex, day, kursIndex] = 0;
                 }
             }
         }
@@ -112,7 +112,7 @@ public sealed class TimeTableWave
 
         foreach (var lession in _kurseOrder)
         {
-            foreach (var day in ..Days.Length)
+            foreach (var day in ..Days.Count)
             {
                 foreach (var hour in ..SlotsPerDay)
                 {
@@ -236,6 +236,39 @@ public sealed class TimeTableWave
                 else
                 {
                     sb.Append(this[hour, day, course].ToString("F3"));
+                }
+                sb.Append(' ');
+            }
+            sb.AppendLine();
+
+        }
+
+        return sb.ToString();
+    }
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append($"   ");
+        foreach (var day in Days)
+        {
+            sb.Append(day.ToString()[..5]);
+            sb.Append(' ');
+        }
+        sb.AppendLine();
+
+        foreach (var hour in ..SlotsPerDay)
+        {
+            sb.Append($"{hour + 1}. ");
+            foreach (var day in Days)
+            {
+                if (FinalPlan[hour, day].Count > 0)
+                {
+                    sb.Append(FinalPlan[hour, day][0].Slug.PadLeft(5));
+                }
+                else
+                {
+                    sb.Append("   --");
                 }
                 sb.Append(' ');
             }
