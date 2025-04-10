@@ -7,7 +7,7 @@ namespace TTC.Cli;
 
 public static class GenerateTimeTableCommand
 {
-    public static void Run(string inputPath, Random random, string? outputPath, string rulesPath, bool verbose, JsonHelper jsonHelper)
+    public static void Run(string inputPath, Random random, string? outputPath, string rulesPath, string? existingPath, bool verbose, JsonHelper jsonHelper)
     {
         var input = new FileInfo(inputPath);
         var output = input.Directory!.File(outputPath ?? $"{input.NameWithoutExtension()}_timetable.json");
@@ -20,6 +20,19 @@ public static class GenerateTimeTableCommand
         {
             Random = random
         };
+
+        if (wave.Rules.Length is 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("No Rules found! Canceling...");
+            Console.ResetColor();
+            return;
+        }
+
+        if (existingPath is not null)
+        {
+            jsonHelper.FillTimeTable(new(existingPath), wave);
+        }
 
         var count = 1;
 

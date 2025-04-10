@@ -1,6 +1,6 @@
 namespace TTC.Core.Rules;
 
-public sealed class RequireOneLessionPerPersonPerSlot : Rule
+public sealed class RequireOneLessonPerPersonPerSlot : Rule
 {
     public override void Apply(TimeTableWave wave)
     {

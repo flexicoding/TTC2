@@ -172,7 +172,7 @@ internal static class TestHelper
         var l51 = Course("5L1", 2, ["Kutscherauer", "Elin", "Johanna", "Marie", "Emma W", "Fenja"]);
         var l31 = Course("3l1", 3, ["Kutscherauer", "Miriana", "Elin", "Johanna", "Tabitha", "Marie", "Emma W", "Fenja", "Helen", "Jonathan", "Violet"]);
 
-        var f51 = Course("5f1", 2, ["Schubart", "Lea", "Marie-M", "Moana"]);
+        var f51 = Course("5F1", 2, ["Schubart", "Lea", "Marie-M", "Moana"]);
         var f31 = Course("3f1", 3, ["Schubart", "Lea", "Marie-M", "Moana", "Nola", "Lilly", "Annabel", "Michael"]);
 
         var sp31 = Course("3sp1", 3, ["Matilda", "Anna", "Juliane", "Clara", "Bruno"]);

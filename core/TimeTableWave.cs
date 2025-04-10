@@ -6,6 +6,7 @@ namespace TTC.Core;
 public sealed class TimeTableWave
 {
     public ImmutableArray<Course> Courses { get; }
+    private FrozenDictionary<Course, int> CoursesLookup { get; }
     public ImmutableArray<Rule> Rules { get; }
     public ImmutableArray<Person> People { get; }
     public Tensor Wave { get; }
@@ -13,10 +14,10 @@ public sealed class TimeTableWave
     public FrozenSet<Day> Days { get; }
     public int SlotsPerDay { get; } = 8;
     public Random Random { get; init; } = Random.Shared;
-    private readonly int[] _kurseOrder;
+    private readonly int[] _coursesOrder;
 
     public ref float this[int hour, Day day, int courseIndex] => ref Wave[hour, (int)day, courseIndex];
-    public ref float this[int hour, Day day, Course course] => ref Wave[hour, (int)day, Courses.IndexOf(course)];
+    public ref float this[int hour, Day day, Course course] => ref Wave[hour, (int)day, CoursesLookup[course]];
     private ref float this[int hour, int day, int courseIndex] => ref Wave[hour, day, courseIndex];
 
     public TimeTableWave(IEnumerable<Course> courses, IEnumerable<Rule> rules)
@@ -30,12 +31,13 @@ public sealed class TimeTableWave
         {
             throw new ArgumentException("Courses contains duplicates", nameof(courses));
         }
+        CoursesLookup = Courses.Select((c, i) => new KeyValuePair<Course, int>(c, i)).ToFrozenDictionary();
         People = [.. courses.SelectMany(k => k.People).Distinct()];
         FinalPlan = new(SlotsPerDay, Days.Count);
         Wave = Tensor.Create(SlotsPerDay, Days.Count, courses.Length);
         Wave.Fill(1);
         Rules = rules;
-        _kurseOrder = [.. Enumerable.Range(0, Courses.Length)];
+        _coursesOrder = [.. Enumerable.Range(0, Courses.Length)];
     }
 
     public int Collapse(bool verbose)
@@ -73,59 +75,36 @@ public sealed class TimeTableWave
         var course = Courses[kursIndex];
         FinalPlan[hour, (Day)day].Add(course);
 
-        EnforceLessionCount(kursIndex, course.LessionsPerTurnus);
-
         return true;
     }
 
-    private void EnforceLessionCount(int kursIndex, int lessionsPerTurnus)
+    public int CountCourseLessons(Course course) => FinalPlan.Count(l => l.Contains(course));
+
+    public (int hour, int day, int courseIndex) IndexOfMaximum()
     {
-        var count = CountCourseLessions(Courses[kursIndex]);
-
-        if (count > lessionsPerTurnus)
-        {
-            throw new UnreachableException("Somehow a course ended up with two many lessions???");
-        }
-
-        if (count == lessionsPerTurnus)
-        {
-            foreach (var day in Days)
-            {
-                foreach (var hourIndex in ..SlotsPerDay)
-                {
-                    this[hourIndex, day, kursIndex] = 0;
-                }
-            }
-        }
-    }
-
-    public int CountCourseLessions(Course course) => FinalPlan.Count(l => l.Contains(course));
-
-    public (int hour, int day, int lession) IndexOfMaximum()
-    {
-        int mhour = -1, mday = -1, mlession = -1;
+        int mhour = -1, mday = -1, mcourseIndex = -1;
         float value = 0;
 
         // we shuffle to prevent the function from always giving back the first maximum.
         // this appears to be enough randomness to generate a variety of time tables
-        Random.Shuffle(_kurseOrder);
+        Random.Shuffle(_coursesOrder);
 
-        foreach (var lession in _kurseOrder)
+        foreach (var course in _coursesOrder)
         {
             foreach (var day in ..Days.Count)
             {
                 foreach (var hour in ..SlotsPerDay)
                 {
-                    if (this[hour, day, lession] > value)
+                    if (this[hour, day, course] > value)
                     {
-                        (mhour, mday, mlession) = (hour, day, lession);
-                        value = this[hour, day, lession];
+                        (mhour, mday, mcourseIndex) = (hour, day, course);
+                        value = this[hour, day, course];
                     }
                 }
             }
         }
 
-        return (mhour, mday, mlession);
+        return (mhour, mday, mcourseIndex);
     }
 
     public void EachSlot(Func<int, Day, Course, bool> predicate, Func<float, float> modifier)
@@ -134,7 +113,7 @@ public sealed class TimeTableWave
         {
             foreach (var hour in ..SlotsPerDay)
             {
-                foreach (var courseIndex in _kurseOrder)
+                foreach (var courseIndex in _coursesOrder)
                 {
                     if (predicate(hour, day, Courses[courseIndex]))
                     {
@@ -151,7 +130,7 @@ public sealed class TimeTableWave
         {
             foreach (var hour in ..SlotsPerDay)
             {
-                foreach (var courseIndex in _kurseOrder)
+                foreach (var courseIndex in _coursesOrder)
                 {
                     this[hour, day, courseIndex] = modifier(hour, day, Courses[courseIndex], this[hour, day, courseIndex]);
                 }
@@ -163,9 +142,9 @@ public sealed class TimeTableWave
     {
         foreach (var day in Days)
         {
-            foreach (var hour in ..SlotsPerDay)
+            foreach (var slot in ..SlotsPerDay)
             {
-                FinalPlan[hour, day].Clear();
+                FinalPlan[slot, day].Clear();
             }
         }
 
@@ -175,18 +154,18 @@ public sealed class TimeTableWave
     public int Validate(bool verbose)
     {
         var issues = 0;
-        // verify each course has the exact amount of lessions
+        // verify each course has the exact amount of lessons
         foreach (var course in Courses)
         {
-            var count = CountCourseLessions(course);
-            if (count != course.LessionsPerTurnus)
+            var count = CountCourseLessons(course);
+            if (count != course.LessonsPerTurnus)
             {
-                WriteLine($"{course.Slug} has {count}/{course.LessionsPerTurnus} lessions per turnus");
+                WriteLine($"{course.Slug} has {count}/{course.LessonsPerTurnus} lessons per turnus");
                 issues++;
             }
         }
 
-        // verify max one lession per slot per person
+        // verify max one lesson per slot per person
         foreach (var person in People)
         {
             foreach (var day in Days)

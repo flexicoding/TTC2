@@ -10,7 +10,7 @@ var jsonHelper = new JsonHelper
     Options = new(JsonSerializerOptions.Default)
     {
         WriteIndented = true,
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     }
 };
 
@@ -38,6 +38,9 @@ outputOption.AddAlias("-o");
 var rulesOption = new Option<string>("--rules", description: "The directory path to the rule configs", getDefaultValue: static () => "Rules");
 rulesOption.AddAlias("-r");
 
+var exitingOption = new Option<string?>("--existing", description: "The path to the existing time table", getDefaultValue: static () => null);
+exitingOption.AddAlias("-e");
+
 var verboseOption = new Option<bool>("--verbose", description: "prints the issues with each attempt");
 verboseOption.AddAlias("-v");
 
@@ -58,7 +61,8 @@ generateTimeTableCommand.AddOption(outputOption);
 generateTimeTableCommand.AddOption(seedOption);
 generateTimeTableCommand.AddOption(rulesOption);
 generateTimeTableCommand.AddOption(verboseOption);
-generateTimeTableCommand.SetHandler(GenerateTimeTableCommand.Run, inputArgument, seedOption, outputOption, rulesOption, verboseOption, jsonHelperBinder);
+generateTimeTableCommand.AddOption(exitingOption);
+generateTimeTableCommand.SetHandler(GenerateTimeTableCommand.Run, inputArgument, seedOption, outputOption, rulesOption, exitingOption, verboseOption, jsonHelperBinder);
 root.AddCommand(generateTimeTableCommand);
 
 var coursesOption = new Option<string>("--courses", description: "Path to the courses referenced in the time table");

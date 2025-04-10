@@ -23,7 +23,4 @@ public sealed class MatchingSlotRule : Rule
             }
         }
     }
-
-    private bool Matches(Course course, Day day, int slot)
-        => Days.Contains(day) && Slots.Contains(slot) && Courses.Contains(course.Slug);
 }

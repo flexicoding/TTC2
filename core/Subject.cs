@@ -1,6 +1,6 @@
 namespace TTC.Core;
 
-public sealed record Subject(string Slug, int LessionsPerTurnus, FrozenSet<Person> Teachers, FrozenSet<Person> Students)
+public sealed record Subject(string Slug, int LessonsPerTurnus, FrozenSet<Person> Teachers, FrozenSet<Person> Students)
 {
     public IEnumerable<Course> DivideIntoCourses(int averageStudentCount, Random? random = null)
     {
@@ -14,9 +14,9 @@ public sealed record Subject(string Slug, int LessionsPerTurnus, FrozenSet<Perso
 
         foreach (var i in ..(courseCount - 1))
         {
-            yield return new Course($"{Slug}{i + 1}", LessionsPerTurnus, [Teachers.ElementAt(i % Teachers.Count), .. students.AsSpan(averageStudentCount * i, averageStudentCount)]);
+            yield return new Course($"{Slug}{i + 1}", LessonsPerTurnus, [Teachers.ElementAt(i % Teachers.Count), .. students.AsSpan(averageStudentCount * i, averageStudentCount)]);
         }
 
-        yield return new Course($"{Slug}{courseCount}", LessionsPerTurnus, [Teachers.ElementAt((courseCount-1) % Teachers.Count), .. students.AsSpan(averageStudentCount * (courseCount - 1))]);
+        yield return new Course($"{Slug}{courseCount}", LessonsPerTurnus, [Teachers.ElementAt((courseCount-1) % Teachers.Count), .. students.AsSpan(averageStudentCount * (courseCount - 1))]);
     }
 }

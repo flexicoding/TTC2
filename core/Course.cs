@@ -1,6 +1,6 @@
 namespace TTC.Core;
 
-public sealed record Course(string Slug, int LessionsPerTurnus, FrozenSet<Person> People) : IEquatable<Course>
+public sealed record Course(string Slug, int LessonsPerTurnus, FrozenSet<Person> People) : IEquatable<Course>
 {
     public bool Equals(Course? other)
     {
