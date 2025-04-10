@@ -231,7 +231,7 @@ public sealed class TimeTableWave
             {
                 if (FinalPlan[hour, day].Count > 0)
                 {
-                    sb.Append(FinalPlan[hour, day][0].Slug);
+                    sb.Append(FinalPlan[hour, day][0].Slug.PadLeft(5));
                 }
                 else
                 {

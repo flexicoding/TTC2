@@ -8,17 +8,15 @@ public sealed class RequireOneLessionPerPersonPerSlot : Rule
         {
             foreach (var hour in ..wave.SlotsPerDay)
             {
-                foreach (var course in wave.FinalPlan[hour, day])
+                var occupiedPeople = wave.FinalPlan[hour, day].SelectMany(static c => c.People).ToFrozenSet();
+
+                if (occupiedPeople.Count is 0) continue;
+
+                foreach (var course in wave.Courses)
                 {
-                    foreach (var person in course.People)
+                    if (course.People.Overlaps(occupiedPeople))
                     {
-                        foreach (var otherCourse in ..wave.Courses.Length)
-                        {
-                            if (wave.Courses[otherCourse].People.Contains(person))
-                            {
-                                wave[hour, day, otherCourse] = 0;
-                            }
-                        }
+                        wave[hour, day, course] = 0;
                     }
                 }
             }

@@ -4,7 +4,7 @@ namespace TTC.Core;
 
 public sealed class TimeTable : IEnumerable<List<Course>>
 {
-    private List<Course>[,] _table;
+    private readonly List<Course>[,] _table;
 
     public TimeTable(int slots, int days)
     {
