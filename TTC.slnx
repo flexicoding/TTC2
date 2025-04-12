@@ -7,4 +7,5 @@
   <Project Path="Ametrin.Utils/src/Ametrin.Utils.csproj" />
   <Project Path="cli/TTC.Cli.csproj" />
   <Project Path="core/TTC.Core.csproj" />
+  <Project Path="TTC.CourseGen/TTC.CourseGen.csproj" Id="7423c70a-1c18-490d-b48d-97f1da44c0d6" />
 </Solution>
